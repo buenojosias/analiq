@@ -24,7 +24,7 @@
             @interact('column_select', $row)
                 @livewire('components.bulk-checkbox', ['production_id' => $row->id], key($row->id))
             @endinteract
-            @interact('column_title', $row)
+            @interact('column_title', $row, $project)
                 <div @class(['line-through text-gray-600' => $row->trashed()])>
                     @if ($row->highlighted)
                         <x-ts-icon name="star" class="w-4 h-4 text-amber-600" />
