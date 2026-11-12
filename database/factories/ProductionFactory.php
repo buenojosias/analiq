@@ -13,6 +13,11 @@ class ProductionFactory extends Factory
             null,
             fake()->city(),
         ]);
+        $title = rtrim(fake()->sentence(), '.');
+
+        if (fake()->boolean()) {
+            $title .= ': '.lcfirst(rtrim(fake()->sentence(), '.'));
+        }
 
         if ($city) {
             $state_id = rand(1, 27);
@@ -25,7 +30,7 @@ class ProductionFactory extends Factory
                     'Scielo',
                     'Scopus',
                     'Capes',
-                    'Web of Science'
+                    'Web of Science',
                 ]),
             'type' => fake()
                 ->randomElement(ProductionTypeEnum::cases())->value,
@@ -35,14 +40,9 @@ class ProductionFactory extends Factory
                     'Inglês',
                     'Português',
                     'Espanhol',
-                    'Português'
+                    'Português',
                 ]),
-            'title' => rtrim(fake()->sentence(), "."),
-            'subtitle' => fake()
-                ->randomElement([
-                    null,
-                    lcfirst(rtrim(fake()->sentence(), ".")),
-                ]),
+            'title' => $title,
             'year' => rand(2019, 2023),
             'institution' => fake()
                 ->randomElement([

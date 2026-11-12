@@ -81,7 +81,7 @@
                                         @endif
                                     @endforeach
                                     {{ $citation->production->year }}.
-                                    {{ !$citation->production->title ? $citation->production->title : $citation->production->title . ': ' . $citation->production->subtitle }}.
+                                    {{ $citation->production->title }}.
                                 </p>
                             @endif
                             @if (!$ref)

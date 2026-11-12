@@ -103,7 +103,7 @@ class RecordPerProgram extends Component
         ];
         $productionHeaders = [
             ['index' => 'institution', 'label' => 'Instituição', 'sortable' => false],
-            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'title', 'label' => 'Título', 'sortable' => false],
             ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
             ['index' => 'year', 'label' => 'Ano', 'sortable' => false],
             ['index' => 'action', 'label' => '', 'sortable' => false],

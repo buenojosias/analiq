@@ -5,8 +5,8 @@ namespace App\Livewire\Internal;
 use App\Enums\ProductionSectionEnum;
 use App\Models\Project;
 use Livewire\Attributes\On;
-use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Smalot\PdfParser\Parser;
 use TallStackUi\Traits\Interactions;
 
 class InternalForm extends Component
@@ -48,20 +48,22 @@ class InternalForm extends Component
         $this->project = $project;
 
         $this->production = $this->project->productions()
-            ->select(['id', 'title', 'subtitle', 'year'])
+            ->select(['id', 'title', 'year'])
             ->findOrFail($production);
 
         $this->file = $this->production->file;
 
-        if ($this->file)
+        if ($this->file) {
             $this->path = str_replace('files/', '', $this->file->path);
+        }
 
         $this->internal = $this->production->internals()
             ->where('section', $this->section)
             ->first();
 
-        if ($this->internal)
+        if ($this->internal) {
             $this->content = $this->internal->content;
+        }
 
         $this->sectionLabel = strtolower(ProductionSectionEnum::from($this->section)->label());
     }
@@ -76,7 +78,7 @@ class InternalForm extends Component
         ]);
 
         $path = storage_path('app/'.$this->file->path);
-        $parser = new \Smalot\PdfParser\Parser();
+        $parser = new Parser;
         $pdf = $parser->parseFile($path);
 
         $text = '';
@@ -111,14 +113,15 @@ class InternalForm extends Component
                     'total_words' => $this->total_words,
                 ]
             )
-        )
+        ) {
             $this->toast()->success('Conteúdo salvo com sucesso.')->send();
-        ;
+        }
+
     }
 
     public function render()
     {
         return view('livewire.internal.internal-form')
-            ->title('Editar ' . $this->sectionLabel);
+            ->title('Editar '.$this->sectionLabel);
     }
 }

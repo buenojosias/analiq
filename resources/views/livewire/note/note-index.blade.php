@@ -11,7 +11,7 @@
                 <div class="space-y-2">
                     <p>{{ $note->content }}</p>
                     @if ($note->production)
-                        <x-ts-link :href="route('project.bibliometrics.productions.show', [$project, $note->production])" :text="$note->production->full_title" sm />
+                        <x-ts-link :href="route('project.bibliometrics.productions.show', [$project, $note->production])" :text="$note->production->title" sm />
                     @endif
                 </div>
                 <div>

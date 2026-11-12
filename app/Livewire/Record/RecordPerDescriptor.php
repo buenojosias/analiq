@@ -48,7 +48,7 @@ class RecordPerDescriptor extends Component
         $selectedWordsJson = json_encode($this->selectedWords);
 
         $records = Production::query()
-            ->select(['id', 'title', 'subtitle', 'type', 'year', 'searched_terms'])
+            ->select(['id', 'title', 'type', 'year', 'searched_terms'])
             ->with('authors')
             ->where('project_id', $this->project->id)
             ->whereRaw('JSON_LENGTH(searched_terms) = ?', [count($this->selectedWords)])
@@ -170,7 +170,7 @@ class RecordPerDescriptor extends Component
 
         $recordHeaders = [
             ['index' => 'selection', 'label' => '', 'sortable' => false],
-            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'title', 'label' => 'Título', 'sortable' => false],
             ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
             ['index' => 'authors', 'label' => 'Autor(es)', 'sortable' => false],
             ['index' => 'year', 'label' => 'Ano', 'sortable' => false, 'align' => 'center'],

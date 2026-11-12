@@ -89,7 +89,7 @@ class ProductionIndex extends Component
     {
         $headers = [
             ['index' => 'select', 'label' => '', 'sortable' => false],
-            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'title', 'label' => 'Título', 'sortable' => false],
         ];
         $optionalColumns = [
             'author' => 'Autor(es)',
@@ -115,7 +115,7 @@ class ProductionIndex extends Component
 
         $this->productions = $this->project->productions()
             ->when($this->q, function ($query) {
-                $query->whereAny(['title', 'subtitle'], 'like', "%$this->q%");
+                $query->where('title', 'like', "%$this->q%");
             })
             ->when($this->anos, function ($query) {
                 $query->whereIn('year', $this->anos);

@@ -10,17 +10,10 @@
                 <div class="col-span-2">
                     <x-ts-select.styled label="Repositório *" wire:model="repository" :options="$bibliometric->repositories" />
                 </div>
-                <div class="col-span-3">
+                <div class="col-span-6">
                     <x-ts-input label="Título *" wire:model="title">
                         <x-slot:suffix>
                             <x-ts-button wire:click.prevent="titleToLower" icon="language" color="slate" outline />
-                        </x-slot:suffix>
-                    </x-ts-input>
-                </div>
-                <div class="col-span-3">
-                    <x-ts-input label="Subtítulo" wire:model="subtitle">
-                        <x-slot:suffix>
-                            <x-ts-button wire:click.prevent="subtitleToLower" icon="language" color="slate" outline />
                         </x-slot:suffix>
                     </x-ts-input>
                 </div>

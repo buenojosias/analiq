@@ -20,8 +20,8 @@
                                 <x-ts-button wire:click="selectAuthor('', '')" icon="x-mark" outline />
                             </div>
                         </x-slot:header>
-                        @interact('column_full_title', $row)
-                            <a href="{{ route('project.bibliometrics.productions.show', [$project, $row]) }}">{{ $row->full_title }}</a>
+                        @interact('column_title', $row)
+                            <a href="{{ route('project.bibliometrics.productions.show', [$project, $row]) }}">{{ $row->title }}</a>
                             @if ($row->institution) ({{ $row->institution }}) @endif
                         @endinteract
                         @interact('column_type', $row)

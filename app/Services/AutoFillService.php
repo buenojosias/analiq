@@ -12,10 +12,9 @@ class AutoFillService
             return null;
         }
 
-        $systemPrompt = <<<EOT
+        $systemPrompt = <<<'EOT'
             Extraia os seguintes dados estruturados do conteúdo HTML acadêmico fornecido:
-                - title
-                - subtitle (em português, se disponível)
+                - title (título completo, incluindo subtítulo quando houver)
                 - year
                 - authors (como uma lista de objetos: forename, lastname)
                 - type (Tese, Dissertação, Periódico)
@@ -31,7 +30,6 @@ class AutoFillService
             Responda em JSON com essa estrutura:
             {
                 "title": "",
-                "subtitle": "",
                 "year": "",
                 "authors": [
                     { "forename": "", "lastname": "" }
@@ -43,22 +41,22 @@ class AutoFillService
                 "doi": "",
                 "language": "",
                 "city": "",
-                "keywords": ""
+                "keywords": "",
                 "abstract": ""
             }
         EOT;
 
         $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . env('DEEPSEEK_API_KEY'),
+            'Authorization' => 'Bearer '.env('DEEPSEEK_API_KEY'),
             'Content-Type' => 'application/json',
         ])->post('https://api.deepseek.com/v1/chat/completions', [
-                    'model' => 'deepseek-chat',
-                    'messages' => [
-                        ['role' => 'system', 'content' => $systemPrompt],
-                        ['role' => 'user', 'content' => strip_tags($url)],
-                    ],
-                    'temperature' => 0.1,
-                ]);
+            'model' => 'deepseek-chat',
+            'messages' => [
+                ['role' => 'system', 'content' => $systemPrompt],
+                ['role' => 'user', 'content' => strip_tags($url)],
+            ],
+            'temperature' => 0.1,
+        ]);
 
         return $response->json();
     }

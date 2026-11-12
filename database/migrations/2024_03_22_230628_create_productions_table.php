@@ -15,8 +15,7 @@ return new class extends Migration
             $table->string('repository', 32);
             $table->string('type', 24);
             $table->string('language', 16);
-            $table->string('title');
-            $table->string('subtitle')->nullable();
+            $table->text('title');
             $table->year('year');
             $table->string('institution')->nullable();
             $table->string('program')->nullable();

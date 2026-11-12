@@ -29,7 +29,7 @@ class GroupShow extends Component
     public function groupProductions()
     {
         return $this->group->productions()
-            ->select(['id', 'title', 'subtitle', 'type', 'year'])
+            ->select(['id', 'title', 'type', 'year'])
             ->with('authors')
             ->get()
             ->sortBy('title');
@@ -44,7 +44,7 @@ class GroupShow extends Component
     public function render()
     {
         $headers = [
-            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'title', 'label' => 'Título', 'sortable' => false],
             ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
             ['index' => 'authors', 'label' => 'Autor(es)', 'sortable' => false],
             ['index' => 'year', 'label' => 'Ano', 'sortable' => false],

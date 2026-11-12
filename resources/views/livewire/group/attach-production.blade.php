@@ -3,7 +3,7 @@
         @foreach ($productions as $key => $production)
             <x-ts-checkbox wire:model="selectedProductions" :id="$key" :value="$production->id">
                 <x-slot:label start>
-                    {{ $production->full_title }}
+                    {{ $production->title }}
                     ({{ $production->type }} - {{ $production->year }})
                 </x-slot:label>
             </x-ts-checkbox>

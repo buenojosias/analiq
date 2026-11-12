@@ -93,7 +93,7 @@ class KeywordIndex extends Component
         ];
         $productionHeaders = [
             ['index' => 'select', 'label' => '', 'sortable' => false],
-            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'title', 'label' => 'Título', 'sortable' => false],
             ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
             ['index' => 'year', 'label' => 'Ano', 'sortable' => false],
             ['index' => 'keywords', 'label' => 'Palavras-chave', 'sortable' => false],

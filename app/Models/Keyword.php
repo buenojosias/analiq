@@ -13,8 +13,19 @@ class Keyword extends Model
     protected $fillable = [
         'production_id',
         'value',
-        'data'
+        'data',
     ];
+
+    protected $attributes = [
+        'data' => '[]',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'data' => 'array',
+        ];
+    }
 
     public function production(): BelongsTo
     {

@@ -26,7 +26,6 @@ class Production extends Model
         'type',
         'language',
         'title',
-        'subtitle',
         'year',
         'institution',
         'program',
@@ -36,10 +35,8 @@ class Production extends Model
         'country',
         'url',
         'doi',
-        'highlighted'
+        'highlighted',
     ];
-
-    protected $appends = ['full_title'];
 
     protected function casts(): array
     {
@@ -48,11 +45,6 @@ class Production extends Model
             'type' => ProductionTypeEnum::class,
             'highlighted' => 'boolean',
         ];
-    }
-
-    public function getFullTitleAttribute(): string
-    {
-        return $this->title . ($this->subtitle ? ': ' . $this->subtitle : '');
     }
 
     public function project(): BelongsTo
@@ -87,7 +79,7 @@ class Production extends Model
 
     public function abstract(): HasOne
     {
-        return $this->hasOne(Internal::class)->where(function($query) {
+        return $this->hasOne(Internal::class)->where(function ($query) {
             $query->where('section', 'resumo');
         });
     }
@@ -99,21 +91,21 @@ class Production extends Model
 
     public function generalGoal(): HasOne
     {
-        return $this->hasOne(Goal::class)->where(function($query) {
+        return $this->hasOne(Goal::class)->where(function ($query) {
             $query->where('level', 'Geral');
         });
     }
 
     public function specificGoals(): HasMany
     {
-        return $this->hasMany(Goal::class)->where(function($query) {
+        return $this->hasMany(Goal::class)->where(function ($query) {
             $query->where('level', 'Específico');
         });
     }
 
     public function body(): HasOne
     {
-        return $this->hasOne(Internal::class)->where(function($query) {
+        return $this->hasOne(Internal::class)->where(function ($query) {
             $query->where('section', 'body');
         });
     }

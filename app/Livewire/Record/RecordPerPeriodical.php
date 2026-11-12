@@ -21,7 +21,7 @@ class RecordPerPeriodical extends Component
         $this->project = $project;
 
         $this->productions = Production::query()
-            ->select('id', 'project_id', 'title', 'subtitle', 'type', 'repository', 'periodical', 'year')
+            ->select('id', 'project_id', 'title', 'type', 'repository', 'periodical', 'year')
             ->where('project_id', $this->project->id)
             ->where('type', 'Periódico')
             ->get();
@@ -91,7 +91,7 @@ class RecordPerPeriodical extends Component
             ['index' => 'productions_count', 'label' => 'Produções', 'sortable' => false],
         ];
         $productionHeaders = [
-            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'title', 'label' => 'Título', 'sortable' => false],
             ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
             ['index' => 'year', 'label' => 'Ano', 'sortable' => false],
             ['index' => 'action', 'label' => '', 'sortable' => false],

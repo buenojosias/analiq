@@ -65,7 +65,7 @@ class TagIndex extends Component
             ['index' => 'productions_count', 'label' => 'Produções', 'sortable' => false, 'align' => 'right'],
         ];
         $productionHeaders = [
-            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'title', 'label' => 'Título', 'sortable' => false],
             ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
             ['index' => 'year', 'label' => 'Ano', 'sortable' => false],
             ['index' => 'tags', 'label' => 'Tags', 'sortable' => false],

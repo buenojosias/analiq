@@ -48,7 +48,7 @@ class RecordPerState extends Component
         ];
         $productionHeaders = [
             ['index' => 'city', 'label' => 'Cidade', 'sortable' => false],
-            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'title', 'label' => 'Título', 'sortable' => false],
             ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
             ['index' => 'year', 'label' => 'Ano', 'sortable' => false],
             ['index' => 'action', 'label' => '', 'sortable' => false],

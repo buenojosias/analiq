@@ -11,7 +11,7 @@
             <x-slot:header>
                 <div class="table-header flex justify-between items-center">
                     <div class="w-1/2">
-                        <x-ts-input wire:model.live.debounce="q" placeholder="Buscar título ou subtítulo" icon="magnifying-glass" />
+                        <x-ts-input wire:model.live.debounce="q" placeholder="Buscar título" icon="magnifying-glass" />
                     </div>
                     <div>
                         @livewire('components.bulk-dropdown', ['project' => $project])
@@ -24,13 +24,13 @@
             @interact('column_select', $row)
                 @livewire('components.bulk-checkbox', ['production_id' => $row->id], key($row->id))
             @endinteract
-            @interact('column_full_title', $row)
+            @interact('column_title', $row)
                 <div @class(['line-through text-gray-600' => $row->trashed()])>
                     @if ($row->highlighted)
                         <x-ts-icon name="star" class="w-4 h-4 text-amber-600" />
                     @endif
                     <a href="{{ route('project.bibliometrics.productions.show', [$project, $row]) }}" wire:navigate>
-                        {{ $row->full_title }}
+                        {{ $row->title }}
                     </a>
                 </div>
             @endinteract

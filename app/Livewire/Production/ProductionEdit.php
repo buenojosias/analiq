@@ -3,7 +3,6 @@
 namespace App\Livewire\Production;
 
 use App\Models\Project;
-use App\Models\Research;
 use App\Models\State;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -14,12 +13,19 @@ class ProductionEdit extends Component
     use Interactions;
 
     public $project;
+
     public $bibliometric;
+
     public $production;
+
     public $years = [];
+
     public $states = [];
+
     public $terms = [];
+
     public $author = [];
+
     public $authors_display = [];
 
     #[Validate('nullable|url')]
@@ -30,9 +36,6 @@ class ProductionEdit extends Component
 
     #[Validate('required|string')]
     public $title;
-
-    #[Validate('nullable|string')]
-    public $subtitle;
 
     #[Validate('required|integer|digits:4|in_array:years.*')]
     public $year;
@@ -71,8 +74,8 @@ class ProductionEdit extends Component
     public $doi;
 
     public $customFields = [];
-    public $customValues = [];
 
+    public $customValues = [];
 
     public function mount(Project $project, $production)
     {
@@ -89,7 +92,6 @@ class ProductionEdit extends Component
         $this->url = $this->production->url;
         $this->repository = $this->production->repository;
         $this->title = $this->production->title;
-        $this->subtitle = $this->production->subtitle;
         $this->year = $this->production->year;
         $this->type = $this->production->type->value;
         $this->language = $this->production->language;
@@ -109,7 +111,7 @@ class ProductionEdit extends Component
         // })->get();
 
         foreach ($this->authors as $author) {
-            array_push($this->authors_display, ' ' . $author['forename'] . ' ' . $author['lastname']);
+            array_push($this->authors_display, ' '.$author['forename'].' '.$author['lastname']);
         }
     }
 
@@ -124,6 +126,7 @@ class ProductionEdit extends Component
         }
         $this->toast()->success('Salvo', 'Produção atualizada com sucesso.')->send();
     }
+
     public function render()
     {
         return view('livewire.production.production-edit')
@@ -138,7 +141,7 @@ class ProductionEdit extends Component
         ]);
         $this->production->authors()->create($this->author);
         array_push($this->authors, ['forename' => $this->author['forename'], 'lastname' => $this->author['lastname']]);
-        array_push($this->authors_display, ' ' . $this->author['forename'] . ' ' . $this->author['lastname']);
+        array_push($this->authors_display, ' '.$this->author['forename'].' '.$this->author['lastname']);
         $this->reset('author');
     }
 
@@ -153,10 +156,5 @@ class ProductionEdit extends Component
     {
         $title = \Str::lower($this->title);
         $this->title = \Str::ucfirst($title);
-    }
-
-    public function subtitleToLower()
-    {
-        $this->subtitle = \Str::lower($this->subtitle);
     }
 }

@@ -40,7 +40,7 @@
                                 <div class="divide-y" x-show="show_year" x-collapse.duration.500ms>
                                     @foreach ($years as $production)
                                         <div class="py-4 px-3 space-y-2">
-                                            <h3 class="text-lg font-semibold">{{ $production->full_title }}</h3>
+                                            <h3 class="text-lg font-semibold">{{ $production->title }}</h3>
                                             <p>
                                                 {{ $production->abstract->content ?? '' }}
                                             </p>

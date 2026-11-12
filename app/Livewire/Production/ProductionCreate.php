@@ -12,12 +12,17 @@ use Livewire\Component;
 class ProductionCreate extends Component
 {
     public $project;
+
     public $bibliometric;
+
     public $repositories;
+
     public $years = [];
+
     public $states = [];
 
     public $author = [];
+
     public $authors_display = [];
 
     #[Validate('nullable|url')]
@@ -28,9 +33,6 @@ class ProductionCreate extends Component
 
     #[Validate('required|string')]
     public $title;
-
-    #[Validate('nullable|string')]
-    public $subtitle;
 
     #[Validate('required|integer|digits:4|in_array:years.*')]
     public $year;
@@ -75,6 +77,7 @@ class ProductionCreate extends Component
     public $note;
 
     public $customFields = [];
+
     public $customValues = [];
 
     public function mount(Project $project)
@@ -100,8 +103,9 @@ class ProductionCreate extends Component
         $createdProduction = $this->project->productions()->create($data);
         // $createdKeywords = $createdProduction->keywords()->create(['data' => $keywords]);
         $createdAuthors = $createdProduction->authors()->createMany($this->authors);
-        if ($abstractData = $this->serializeAbstract())
+        if ($abstractData = $this->serializeAbstract()) {
             $createdProduction->abstract()->create($abstractData);
+        }
 
         if ($createdProduction && $createdAuthors) {
             \DB::commit();
@@ -113,7 +117,7 @@ class ProductionCreate extends Component
             if ($this->note) {
                 $createdProduction->notes()->create([
                     'project_id' => $this->project->id,
-                    'content' => $this->note
+                    'content' => $this->note,
                 ]);
             }
 
@@ -135,14 +139,16 @@ class ProductionCreate extends Component
         $keywords = array_map(function ($keyword) {
             return \Str::ucfirst($keyword);
         }, $keywords);
+
         return $keywords;
     }
 
     public function serializeAbstract()
     {
         $abstract = $this->abstract ?? null;
-        if (!$abstract)
+        if (! $abstract) {
             return null;
+        }
 
         $data = [];
         $data['section'] = 'resumo';
@@ -166,7 +172,7 @@ class ProductionCreate extends Component
             'author.lastname' => 'required|string',
         ]);
         array_push($this->authors, ['forename' => $this->author['forename'], 'lastname' => $this->author['lastname']]);
-        array_push($this->authors_display, ' ' . $this->author['forename'] . ' ' . $this->author['lastname']);
+        array_push($this->authors_display, ' '.$this->author['forename'].' '.$this->author['lastname']);
         $this->reset('author');
     }
 
@@ -180,11 +186,6 @@ class ProductionCreate extends Component
     {
         $title = \Str::lower($this->title);
         $this->title = \Str::ucfirst($title);
-    }
-
-    public function subtitleToLower()
-    {
-        $this->subtitle = \Str::lower($this->subtitle);
     }
 
     public function institutionToLower()
@@ -225,7 +226,8 @@ class ProductionCreate extends Component
         $result = $autoFillService->fill($html);
 
         if (isset($result['error'])) {
-            session()->flash('error', 'Erro ao preencher os dados automaticamente: ' . $result['error']);
+            session()->flash('error', 'Erro ao preencher os dados automaticamente: '.$result['error']);
+
             return;
         }
 
@@ -240,7 +242,6 @@ class ProductionCreate extends Component
 
         // Agora você pode acessar diretamente:
         $this->title = $data['title'] ?? null;
-        $this->subtitle = $data['subtitle'] ?? null;
         $this->year = $data['year'] ?? null;
         $this->authors = $data['authors'] ?? [];
         $this->type = $data['type'] ?? null;
@@ -253,7 +254,7 @@ class ProductionCreate extends Component
         $this->doi = $data['doi'] ?? null;
         $this->language = $data['language'] ?? null;
         foreach ($this->authors as $author) {
-            array_push($this->authors_display, ' ' . $author['forename'] . ' ' . $author['lastname']);
+            array_push($this->authors_display, ' '.$author['forename'].' '.$author['lastname']);
         }
     }
 }

@@ -11,11 +11,17 @@ class AttachProduction extends Component
     use Interactions;
 
     public $slide = false;
+
     public $project;
+
     public $group;
+
     public $groupProductions = [];
+
     public $productions;
+
     public $selectedProductions = [];
+
     public $note;
 
     public function mount($project, $group, $groupProductions)
@@ -28,7 +34,7 @@ class AttachProduction extends Component
     public function getProductions()
     {
         $this->productions = $this->project->productions()
-            ->select(['id', 'title', 'subtitle', 'type', 'year'])
+            ->select(['id', 'title', 'type', 'year'])
             ->whereNotIn('id', $this->groupProductions->pluck('id'))
             // ->with('authors')
             ->get()
@@ -44,6 +50,7 @@ class AttachProduction extends Component
     public function render()
     {
         $this->getProductions();
+
         return view('livewire.group.attach-production');
     }
 

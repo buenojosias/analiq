@@ -10,7 +10,7 @@
                 {{ Str::upper($author->lastname) }}, {{ $author->forename }}{{ !$loop->last ? '; ' : (!str_ends_with($author->forename, '.') ? '.' : '') }}
             @endforeach
             @if(in_array($reference->type->value, ['TCC', 'Tese', 'Dissertação']))
-                <strong>{{ $reference->title }}</strong>@if ($reference->subtitle){{ ': '. $reference->subtitle }}@endif.
+                <strong>{{ $reference->title }}</strong>.
                 {{ $reference->year }}.
                 {{ $reference->type }}
                 <span class="text-red-600">(GRAU DE INSTRUÇÃO) –
@@ -23,7 +23,7 @@
                     Acesso em: {{ $reference->access_at }}.
                 @endif
             @else
-                {{ $reference->title }}@if ($reference->subtitle){{ ': '. $reference->subtitle }}@endif.
+                {{ $reference->title }}.
                 <strong>{{ $reference->periodical }}</strong>,
                 @if($reference->city){{ $reference->city }}, @endif
                 <span class="text-red-600">v. {{ $reference->volume }},

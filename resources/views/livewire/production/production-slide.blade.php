@@ -1,7 +1,7 @@
 <x-ts-slide wire>
     @if ($production)
         <x-slot:title>
-            {{ $production->full_title }}
+            {{ $production->title }}
         </x-slot:title>
         <div class="detail">
             <x-detail label="Tipo" :value="$production->type" />

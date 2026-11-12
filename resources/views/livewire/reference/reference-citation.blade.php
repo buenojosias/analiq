@@ -25,7 +25,7 @@
             </div>
         </x-slot>
         @interact('column_production', $row)
-            {{ $row->production->full_title }} ({{ $row->production->year }})
+            {{ $row->production->title }} ({{ $row->production->year }})
         @endinteract
         @interact('column_action', $row)
             <x-ts-link :href="route('project.bibliometrics.productions.show', [$project, $row->production])" wire:navigate icon="arrow-top-right-on-square" />

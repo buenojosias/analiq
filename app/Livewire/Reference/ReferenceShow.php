@@ -29,7 +29,7 @@ class ReferenceShow extends Component
     public function render()
     {
         $headers = [
-            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'title', 'label' => 'Título', 'sortable' => false],
             ['index' => 'citations_count', 'label' => 'Citações', 'sortable' => false],
         ];
 

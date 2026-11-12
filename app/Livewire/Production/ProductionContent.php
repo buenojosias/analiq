@@ -29,7 +29,7 @@ class ProductionContent extends Component
         $this->project = $project;
 
         $this->production = $project->productions()
-            ->select(['id', 'title', 'subtitle', 'year'])
+            ->select(['id', 'title', 'year'])
             ->findOrFail($production);
 
         $this->section = $section;

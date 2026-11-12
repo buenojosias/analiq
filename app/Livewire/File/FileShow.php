@@ -32,15 +32,16 @@ class FileShow extends Component
         $this->project = $project;
 
         $this->production = $project->productions()
-            ->select(['id', 'title', 'subtitle', 'year'])
+            ->select(['id', 'title', 'year'])
             ->with('file')
             ->findOrFail($production);
 
         $this->file = $this->production->file;
 
         // $this->path = storage_path($this->file->path);
-        if ($this->file)
+        if ($this->file) {
             $this->path = str_replace('files/', '', $this->file->path);
+        }
     }
 
     public function render()

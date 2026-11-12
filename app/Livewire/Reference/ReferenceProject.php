@@ -2,12 +2,14 @@
 
 namespace App\Livewire\Reference;
 
+use App\Enums\MonthEnum;
 use App\Models\Project;
 use Livewire\Component;
 
 class ReferenceProject extends Component
 {
     public $project;
+
     public $references;
 
     public function mount(Project $project)
@@ -18,7 +20,7 @@ class ReferenceProject extends Component
     public function render()
     {
         $this->references = $this->project->productions()
-            ->select('id', 'title', 'subtitle', 'year', 'type', 'institution', 'periodical', 'url', 'doi', 'city', 'created_at')
+            ->select('id', 'title', 'year', 'type', 'institution', 'periodical', 'url', 'doi', 'city', 'created_at')
             ->with('authors')
             ->get()
             ->sortBy(function ($production) {
@@ -26,9 +28,10 @@ class ReferenceProject extends Component
             });
 
         $this->references->map(function ($production) {
-            $accessAt = $production->created_at->format('d'). ' ';
-            $accessAt .= \App\Enums\MonthEnum::from($production->created_at->format('m'))->toAbbr(). ' ';
+            $accessAt = $production->created_at->format('d').' ';
+            $accessAt .= MonthEnum::from($production->created_at->format('m'))->toAbbr().' ';
             $accessAt .= $production->created_at->format('Y');
+
             return $production->access_at = $accessAt;
         });
 
