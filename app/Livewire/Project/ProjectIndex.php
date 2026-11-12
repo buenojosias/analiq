@@ -21,8 +21,8 @@ class ProjectIndex extends Component
     public function render()
     {
         $headers = [
-            ['index' => 'requested_at', 'label' => 'Data', 'sortable' => false],
             ['index' => 'theme', 'label' => 'Tema', 'sortable' => false],
+            ['index' => 'requested_at', 'label' => 'Data', 'sortable' => false],
             ['index' => 'student', 'label' => 'Estudante', 'sortable' => false],
         ];
 

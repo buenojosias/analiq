@@ -3,11 +3,11 @@
         <x-ts-button text="Novo projeto" x-on:click="$wire.dispatch('open-form-modal')" />
     </x-page-header>
     <x-ts-table :$headers :rows="$projects">
-        @interact('column_requested_at', $row)
-            {{ $row->requested_at->format('d/m/Y') }}
-        @endinteract
         @interact('column_theme', $row)
             <a href="{{ route('project.show', $row) }}">{{ $row->theme }}</a>
+        @endinteract
+        @interact('column_requested_at', $row)
+            {{ $row->requested_at->format('d/m/Y') }}
         @endinteract
         @interact('column_student', $row)
             {{ $row->student?->name }}

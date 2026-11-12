@@ -22,12 +22,14 @@
         </div>
 
         <div class="col-span-3 space-y-6">
-            <x-ts-table :$headers :rows="$types">
-                <x-slot:header>Resultados</x-slot:header>
+            <x-ts-card header="Produções encontradas" paddingless>
+                <x-ts-table :$headers :rows="$types">
+                </x-ts-table>
                 <x-slot:footer>
                     <x-ts-link :href="route('project.bibliometrics.productions.index', $project)" wire:navigate>Ver todas</x-ts-link>
+                    <x-ts-link :href="route('project.bibliometrics.productions.create', $project)" wire:navigate text="Nova produção" />
                 </x-slot:footer>
-            </x-ts-table>
+            </x-ts-card>
 
             <div class="grid sm:grid-cols-2 gap-4">
                 @livewire('bibliometric.custom-fields', ['bibliometric' => $bibliometric])
