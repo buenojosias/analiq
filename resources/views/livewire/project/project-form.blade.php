@@ -1,17 +1,19 @@
-<x-ts-modal title="Novo projeto" size="sm" wire>
-    <form class="space-y-4">
-        <div>
-            <x-ts-input wire:model="theme" label="Tema do projeto *" />
-        </div>
-        <div>
-            <x-ts-date wire:model="requested_at" label="Data da solicitação *" format="DD/MM/YYYY" :max-date="now()" />
-        </div>
-        <div>
-            <x-ts-select.styled wire:model="student_id" label="Estudante pesquisador" hint="Opcional" placeholder="Selecione uma opção"
-                :options="$students" select="label:name|value:id" />
-        </div>
+<div>
+    <x-ts-modal title="{{ $selectedProject ? 'Editar projeto' : 'Novo projeto' }}" size="sm" wire>
+        <form id="project-form" wire:submit="save" class="space-y-4">
+            <div>
+                <x-ts-input wire:model="theme" label="Tema do projeto *" />
+            </div>
+            <div>
+                <x-ts-date wire:model="requested_at" label="Data da solicitação *" format="DD/MM/YYYY" :max-date="now()" />
+            </div>
+            <div>
+                <x-ts-select.styled wire:model="student_id" label="Estudante pesquisador" hint="Opcional" placeholder="Selecione uma opção"
+                    :options="$students" select="label:name|value:id" />
+            </div>
+        </form>
         <x-slot:footer>
-            <x-ts-button type="submit" wire:click="save" text="Salvar" />
+            <x-ts-button type="submit" form="project-form" text="Salvar" />
         </x-slot:footer>
-    </form>
-</x-ts-modal>
+    </x-ts-modal>
+</div>

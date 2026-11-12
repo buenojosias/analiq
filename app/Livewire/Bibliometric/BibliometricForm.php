@@ -30,23 +30,34 @@ class BibliometricForm extends Component
     #[Validate('required:array')]
     public $combinations = [];
 
-    #[Validate('required|integer|digits:4|min:1900|max:2025')]
+    #[Validate]
     public $start_year;
 
-    #[Validate('required|integer|digits:4|min:1900|max:2025')]
+    #[Validate]
     public $end_year;
 
     #[Validate('required|array')]
     public $languages = ['Portugês'];
 
     public $avaliable_types = [];
+
     public int $current_year;
+
+    protected function rules(): array
+    {
+        $yearRule = 'required|integer|digits:4|min:1900|max:'.now()->year;
+
+        return [
+            'start_year' => $yearRule,
+            'end_year' => $yearRule,
+        ];
+    }
 
     public function mount(Project $project)
     {
         $this->project = $project;
 
-        if($this->bibliometric = $project->bibliometric) {
+        if ($this->bibliometric = $project->bibliometric) {
             $this->id = $this->bibliometric->id;
             $this->student_id = $this->bibliometric->student_id;
             $this->repositories = $this->bibliometric->repositories;
@@ -75,7 +86,7 @@ class BibliometricForm extends Component
     {
         $data = $this->validate();
 
-        if($this->bibliometric) {
+        if ($this->bibliometric) {
             $this->bibliometric->update($data);
             $this->toast()->success('Salvo', 'Bibliometria salva com sucesso.')->send();
         } else {

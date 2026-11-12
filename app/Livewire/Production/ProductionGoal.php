@@ -39,6 +39,7 @@ class ProductionGoal extends Component
     public function render()
     {
         $this->specificGoals = $this->production->goals->where('level', 'Específico');
+
         return view('livewire.production.production-goal')
             ->layout('layouts.production')
             ->layoutData([
@@ -59,18 +60,16 @@ class ProductionGoal extends Component
         $this->toast()->success('Objetivo salvo com sucesso.')->send();
     }
 
-    public function saveSpecificGoal($id = null)
+    public function saveSpecificGoal(): void
     {
-        if ($id) {
-            $goal = $this->production->specificGoals()->findOrFail($id);
-            $goal->content = $this->specificGoals->find($id)->content;
-            dd($goal->content);
-        } else {
-            $this->production->specificGoals()->create([
-                'level' => 'Específico',
-                'content' => $this->specificContent
-            ]);
-        }
+        $data = $this->validate(['specificContent' => ['required', 'string']]);
+
+        $this->production->specificGoals()->create([
+            'level' => 'Específico',
+            'content' => $data['specificContent'],
+        ]);
+        $this->production->unsetRelation('goals');
+
         $this->creatingSpecific = false;
         $this->reset('specificContent');
         $this->toast()->success('Objetivo específico salvo com sucesso.')->send();
@@ -87,7 +86,8 @@ class ProductionGoal extends Component
 
     public function confirmDelete($id): void
     {
-        $this->production->goals()->find($id)->delete();
+        $this->production->specificGoals()->findOrFail($id)->delete();
+        $this->production->unsetRelation('goals');
         $this->toast()->success('Objetivo removido com sucesso.')->send();
     }
 }

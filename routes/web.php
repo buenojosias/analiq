@@ -11,6 +11,7 @@ use App\Livewire\File\FileIndex;
 use App\Livewire\File\FileShow;
 use App\Livewire\Group\GroupIndex;
 use App\Livewire\Group\GroupShow;
+use App\Livewire\Internal\InternalForm;
 use App\Livewire\Keyword\KeywordIndex;
 use App\Livewire\Note\NoteIndex;
 use App\Livewire\Production\ProductionCitation;
@@ -53,11 +54,11 @@ use App\Livewire\WordRanking\WordRankingShow;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
-Route::get('pdfs/{path}', [FileController::class, 'show'])->name('files');
-Route::get('pdfs', [FileController::class, 'index'])->name('files.index');
 Route::view('novo', 'new-layout')->name('new-layout');
 
 Route::middleware(['auth'])->group(function () {
+
+    Route::get('pdfs/{path}', [FileController::class, 'show'])->name('files');
 
     Route::get('dashboard', DashboardIndex::class)->name('dashboard');
 
@@ -88,7 +89,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('producoes/{production}/referencias', ProductionReference::class)->name('productions.references');
         Route::get('producoes/{production}/citacoes', ProductionCitation::class)->name('productions.citations');
         Route::get('producoes/{production}/{section}', ProductionContent::class)->name('productions.section');
-        Route::get('producoes/{production}/{section}/form', \App\Livewire\Internal\InternalForm::class)->name('productions.section.form');
+        Route::get('producoes/{production}/{section}/form', InternalForm::class)->name('productions.section.form');
 
         Route::get('referencias', ReferenceIndex::class)->name('references.index');
         Route::get('referencias/projeto', ReferenceProject::class)->name('references.project');
@@ -130,11 +131,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('arquivos', FileIndex::class)->name('files.index');
 
     });
-    Route::get('autores', [\App\Http\Controllers\AuthorController::class, 'index'])->name('authors.index');
-    Route::get('autores/check', [\App\Http\Controllers\AuthorController::class, 'check'])->name('authors.check');
-    Route::get('keywords', [\App\Http\Controllers\KeywordController::class, 'index'])->name('keywords.index');
-    Route::get('keywords/check', [\App\Http\Controllers\KeywordController::class, 'check'])->name('keywords.check');
-
     // Route::view('profile', 'profile')->name('profile');
 
     //     Route::get('pub/{publication}/conteudo', \App\Livewire\Production\ProductionContent::class)->name('researches.publications.content');
@@ -144,4 +140,4 @@ Route::middleware(['auth'])->group(function () {
     // });
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

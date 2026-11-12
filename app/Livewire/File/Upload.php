@@ -2,11 +2,11 @@
 
 namespace App\Livewire\File;
 
-use App\Models\File;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Smalot\PdfParser\Parser;
 
 class Upload extends Component
 {
@@ -33,8 +33,8 @@ class Upload extends Component
         $this->production_id = $production->id;
 
         $this->filename =
-            $this->production->title . ' (' .
-            $this->production->year . ')';
+            $this->production->title.' ('.
+            $this->production->year.')';
     }
 
     public function updatedFile(): void
@@ -44,36 +44,31 @@ class Upload extends Component
         $this->store();
     }
 
-    public function store(): void
+    protected function store(): void
     {
         $saved = $this->file->store('pdfs');
         $this->path = str_replace('pdfs/', '', $saved);
-        $file = Storage::disk('s3')->get($saved);
+        $file = Storage::get($saved);
 
-        $parser = new \Smalot\PdfParser\Parser();
+        $parser = new Parser;
         $pdf = $parser->parseContent($file);
-        $this->pages = count($pdf->getPages()) ?? null;
+        $this->pages = count($pdf->getPages());
 
         $this->save();
     }
 
-    public function save()
+    protected function save(): void
     {
         $data = $this->validate([
             'production_id' => 'required|integer',
             'filename' => 'required|string',
             'path' => 'required|string',
             'size' => 'required|decimal:3',
-            'pages' => 'required|integer|min:1'
+            'pages' => 'required|integer|min:1',
         ]);
 
-        try {
-            $file = $this->production->file()->create($data);
-            // $file = File::query()->create($data);
-            $this->dispatch('file-uploaded', file: $file);
-        } catch (\Throwable $th) {
-            dd($th);
-        }
+        $file = $this->production->file()->create($data);
+        $this->dispatch('file-uploaded', file: $file);
     }
 
     public function render()

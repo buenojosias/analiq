@@ -3,24 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\File;
-use Illuminate\Http\Request;
+use App\Models\Production;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class FileController extends Controller
 {
-    public function index()
+    public function show(string $path): StreamedResponse
     {
-        $files = Storage::allFiles('pdfs');
-        dd($files);
-    }
+        $file = File::query()
+            ->where('path', $path)
+            ->whereHasMorph('fileable', [Production::class], fn (Builder $query) => $query->whereHas('project'))
+            ->firstOrFail();
 
-    public function show($path)
-    {
-        // $pdf = File::where('path', $path)->firstOrFail();
-        // $path = $pdf->path;
-        // return Storage::response('files/'.$path);
-        $path = 'pdfs/' . $path;
+        $storagePath = 'pdfs/'.$file->path;
+        abort_unless(Storage::exists($storagePath), 404);
 
-        return Storage::response($path);
+        return Storage::response($storagePath);
     }
 }
