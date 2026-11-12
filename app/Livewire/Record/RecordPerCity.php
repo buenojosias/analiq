@@ -85,23 +85,32 @@ class RecordPerCity extends Component
             $typeTotals['total'] += $typeTotal;
         }
 
-        foreach ($years as $year) {
-            $yearTotals[$year] = 0;
-        }
-        $yearTotals['total'] = 0;
+        $cityRows = $productionsByCity->map(fn ($productions, $city): array => [
+            'city' => $city === '' ? 'Não informada' : $city,
+            'key' => $city,
+            'state' => $productions->first()?->state?->abbreviation,
+            'productions_count' => $productions->count(),
+        ])->values();
+        $cityHeaders = [
+            ['index' => 'city', 'label' => 'Cidade', 'sortable' => false],
+            ['index' => 'productions_count', 'label' => 'Produções', 'sortable' => false],
+        ];
+        $productionHeaders = [
+            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
+            ['index' => 'year', 'label' => 'Ano', 'sortable' => false],
+            ['index' => 'action', 'label' => '', 'sortable' => false],
+        ];
+        $yearMatrix = TableMatrix::build('Cidades', $years, $tableByYear, columnTotals: $yearTotals);
+        $typeMatrix = TableMatrix::build('Cidades', $types, $tableByType, columnTotals: $typeTotals);
 
-        foreach ($types as $type) {
-            $typeTotals[$type] = 0;
-        }
-        $typeTotals['total'] = 0;
-
-        return view('livewire.record.record-per-city',
-            compact(
-                'productionsByCity',
-                'years', 'tableByYear', 'yearTotals',
-                'types', 'tableByType', 'typeTotals',
-            )
-        )
+        return view('livewire.record.record-per-city', compact(
+            'cityRows',
+            'cityHeaders',
+            'productionHeaders',
+            'yearMatrix',
+            'typeMatrix',
+        ))
             ->title('Relatório por cidade');
     }
 

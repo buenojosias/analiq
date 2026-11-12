@@ -13,6 +13,7 @@ class RecordPerDescriptor extends Component
     public $selectedWords = [];
 
     public $bibliometricTypes = [];
+
     public $bibliometricRepositories = [];
 
     public $bibliometricTerms = [];
@@ -22,6 +23,7 @@ class RecordPerDescriptor extends Component
     public $bibliometricYears = [];
 
     public $withTrashed = false;
+
     public $descriptor = null;
 
     public function mount(Project $project)
@@ -51,14 +53,14 @@ class RecordPerDescriptor extends Component
             ->where('project_id', $this->project->id)
             ->whereRaw('JSON_LENGTH(searched_terms) = ?', [count($this->selectedWords)])
             ->whereRaw('JSON_CONTAINS(searched_terms, ?)', [$selectedWordsJson])
-            ->when($this->selectedTypes, function($query) {
+            ->when($this->selectedTypes, function ($query) {
                 $query->whereIn('type', $this->selectedTypes);
             })
-            ->when($this->withTrashed, function($query) {
+            ->when($this->withTrashed, function ($query) {
                 $query->withTrashed();
             })
             ->get();
-            // ->groupBy('type');
+        // ->groupBy('type');
         // FIM VERSÃO 1
 
         // VERSÃO 2
@@ -67,6 +69,7 @@ class RecordPerDescriptor extends Component
         $groupedByWords = $productions->groupBy(function ($production) {
             $words = $production->searched_terms;
             sort($words);
+
             return json_encode($words);
         });
 
@@ -92,17 +95,17 @@ class RecordPerDescriptor extends Component
             ];
         }
 
-        foreach($types as $type) {
+        foreach ($types as $type) {
             $typeTotals[$type] = 0;
         }
         $typeTotals['total'] = 0;
 
-        foreach($repositories as $repository) {
+        foreach ($repositories as $repository) {
             $repositoryTotals[$repository] = 0;
         }
         $repositoryTotals['total'] = 0;
 
-        foreach($years as $year) {
+        foreach ($years as $year) {
             $yearTotals[$year] = 0;
         }
         $yearTotals['total'] = 0;
@@ -156,7 +159,29 @@ class RecordPerDescriptor extends Component
         }
         // FIM VERSÃO 2
 
-        return view('livewire.record.record-per-descriptor', compact('records', 'tableByWord', 'tableByType', 'tableByRepository', 'tableByYear', 'types', 'repositories', 'years', 'typeTotals', 'repositoryTotals', 'yearTotals'))
+        $wordHeaders = [
+            ['index' => 'word', 'label' => 'Combinações', 'sortable' => false],
+            ['index' => 'total', 'label' => 'Produções', 'sortable' => false, 'align' => 'center'],
+        ];
+        $wordRows = collect($tableByWord)->map(fn (array $counts, string $word): array => [
+            'word' => $word,
+            'total' => $counts['total'],
+        ])->values();
+
+        $recordHeaders = [
+            ['index' => 'selection', 'label' => '', 'sortable' => false],
+            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
+            ['index' => 'authors', 'label' => 'Autor(es)', 'sortable' => false],
+            ['index' => 'year', 'label' => 'Ano', 'sortable' => false, 'align' => 'center'],
+            ['index' => 'action', 'label' => '', 'sortable' => false],
+        ];
+
+        $typeMatrix = TableMatrix::build('Descritores', $types, $tableByType, columnTotals: $typeTotals);
+        $repositoryMatrix = TableMatrix::build('Descritores', $repositories, $tableByRepository, columnTotals: $repositoryTotals);
+        $yearMatrix = TableMatrix::build('Descritores', $years, $tableByYear, columnTotals: $yearTotals);
+
+        return view('livewire.record.record-per-descriptor', compact('records', 'wordHeaders', 'wordRows', 'recordHeaders', 'typeMatrix', 'repositoryMatrix', 'yearMatrix'))
             ->title('Relatório por descritores');
     }
 

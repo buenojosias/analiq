@@ -17,7 +17,9 @@ class StudentShow extends Component
 
     public function render()
     {
-        return view('livewire.student.student-show')
+        $projectHeaders = [['index' => 'theme', 'label' => 'Projeto', 'sortable' => false]];
+
+        return view('livewire.student.student-show', compact('projectHeaders'))
             ->title('Estudante');
     }
 }

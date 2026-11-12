@@ -12,10 +12,10 @@ use TallStackUi\Traits\Interactions;
 class ProductionCitation extends Component
 {
     use Interactions;
-
     use WithPagination;
 
     public $project;
+
     public $production;
 
     #[Url('ref', except: '')]
@@ -45,12 +45,18 @@ class ProductionCitation extends Component
 
     public function render()
     {
+        $headers = [
+            ['index' => 'content', 'label' => 'Citação', 'sortable' => false],
+            ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
+            ['index' => 'reference', 'label' => 'Referência', 'sortable' => false],
+        ];
+
         $citations = $this->production->citations()
-            ->where('content', 'like', '%' . $this->q . '%')
+            ->where('content', 'like', '%'.$this->q.'%')
             ->with('reference')
             ->paginate();
 
-        return view('livewire.production.production-citation', compact('citations'))
+        return view('livewire.production.production-citation', compact('citations', 'headers'))
             ->layout('layouts.production')
             ->layoutData([
                 'title' => 'Citações da produção',
@@ -63,7 +69,7 @@ class ProductionCitation extends Component
     {
         if ($name === 'searchReference') {
             $this->loadReferences();
-        } else if ($name === 'content') {
+        } elseif ($name === 'content') {
             $this->content = trim(preg_replace('/\n|\s\s+/', ' ', $this->content));
         }
     }
@@ -82,7 +88,7 @@ class ProductionCitation extends Component
     public function loadReferences()
     {
         $this->references = $this->production->references()
-            ->whereAny(['title', 'short_author', 'long_author'], 'like', '%' . $this->searchReference . '%')
+            ->whereAny(['title', 'short_author', 'long_author'], 'like', '%'.$this->searchReference.'%')
             ->orderBy('short_author')
             ->orderBy('year')
             ->limit(10)

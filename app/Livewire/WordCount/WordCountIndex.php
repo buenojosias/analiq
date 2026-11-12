@@ -18,9 +18,9 @@ class WordCountIndex extends Component
         $wordcounts = $project->wordCounts;
 
         foreach ($wordcounts as $wc) {
-            $wc->productoins_count = count($wc->records);
+            $wc->productions_count = count($wc->records);
             $wc->total_count = 0;
-            foreach($wc->records as $record) {
+            foreach ($wc->records as $record) {
                 $wc->total_count += $record['count'];
             }
         }
@@ -30,7 +30,14 @@ class WordCountIndex extends Component
 
     public function render()
     {
-        return view('livewire.word-count.word-count-index')
+        $headers = [
+            ['index' => 'word', 'label' => 'Palavra consultada', 'sortable' => false],
+            ['index' => 'sections', 'label' => 'Seções', 'sortable' => false],
+            ['index' => 'productions_count', 'label' => 'Resultados', 'sortable' => false],
+            ['index' => 'total_count', 'label' => 'Contagem', 'sortable' => false],
+        ];
+
+        return view('livewire.word-count.word-count-index', compact('headers'))
             ->title('Contagem de palavras');
     }
 }

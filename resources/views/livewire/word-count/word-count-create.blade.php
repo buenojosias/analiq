@@ -39,33 +39,27 @@
         @endif
     </div>
 
-    <x-table>
-        <x-slot name="header">
-            <th>Produção</th>
-            <th>Tipo</th>
-            <th>Seção</th>
-            <th>Contagem</th>
-            <th>Percentual</th>
-            <th></th>
-        </x-slot>
-        <x-slot name="body">
-            @if ($results)
-                @foreach ($results as $result)
-                    <tr>
-                        <td>{{ $result->production->title }}</td>
-                        <td>{{ $result->production->type }}</td>
-                        <td>{{ $result->section->label() }}</td>
-                        <td>{{ $result->count }} / {{ $result->total_words }}</td>
-                        <td>{{ $result->percentage }}%</td>
-                        <td>
-                            <x-ts-button outline wire:click="selectResult" text="Ver contexto"
-                                wire:click="loadContext({{ $result->id }}, '{{ $result->section }}')" />
-                        </td>
-                    </tr>
-                @endforeach
-            @endif
-        </x-slot>
-    </x-table>
+    <x-ts-table :$headers :rows="$results">
+        @interact('column_production', $row)
+            {{ $row->production->title }}
+        @endinteract
+        @interact('column_type', $row)
+            {{ $row->production->type->value }}
+        @endinteract
+        @interact('column_section', $row)
+            {{ $row->section->label() }}
+        @endinteract
+        @interact('column_count', $row)
+            {{ $row->count }} / {{ $row->total_words }}
+        @endinteract
+        @interact('column_percentage', $row)
+            {{ $row->percentage }}%
+        @endinteract
+        @interact('column_action', $row)
+            <x-ts-button outline text="Ver contexto"
+                wire:click="loadContext({{ $row->id }}, '{{ $row->section->value }}')" />
+        @endinteract
+    </x-ts-table>
 
     @if ($content)
         <livewire:word-count.word-count-context :$content :$word />

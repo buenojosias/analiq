@@ -2,19 +2,25 @@
 
 namespace App\Livewire\Bibliometric;
 
-use Livewire\Attributes\Title;
 use Livewire\Component;
 
 class BibliometricIndex extends Component
 {
     public function render()
     {
+        $headers = [
+            ['index' => 'requested_at', 'label' => 'Data', 'sortable' => false],
+            ['index' => 'theme', 'label' => 'Tema', 'sortable' => false],
+            ['index' => 'student', 'label' => 'Estudante', 'sortable' => false],
+            ['index' => 'action', 'label' => '', 'sortable' => false],
+        ];
+
         $researches = Research::query()
             ->with('student')
             ->withCount('publications')
             ->get();
 
-        return view('livewire.bibliometric.bibliometric-index', compact(['researches']))
+        return view('livewire.bibliometric.bibliometric-index', compact('researches', 'headers'))
             ->title('Bibliometria');
     }
 }

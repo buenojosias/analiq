@@ -35,7 +35,14 @@ class WordRankingShow extends Component
 
     public function render()
     {
-        return view('livewire.word-ranking.word-ranking-show')
+        $headers = [
+            ['index' => 'word', 'label' => 'Palavra', 'sortable' => false],
+            ['index' => 'count', 'label' => 'Ocorrências', 'sortable' => false],
+            ['index' => 'internal_count', 'label' => 'Produções', 'sortable' => false],
+            ['index' => 'action', 'label' => '', 'sortable' => false],
+        ];
+
+        return view('livewire.word-ranking.word-ranking-show', compact('headers'))
             ->title('Ranking de palavras');
     }
 }

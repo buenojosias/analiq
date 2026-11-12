@@ -1,42 +1,25 @@
 <div class="flex-1 space-y-3">
-    <x-table>
-        <div class="table-header flex justify-end gap-2">
-            <x-ts-button text="Adicionar referência" x-on:click="$tsui.open.modal('reference-modal')" />
-            <x-ts-button text="Vincular existente" x-on:click="$tsui.open.modal('sync-modal')" flat />
-        </div>
+    <x-ts-table :$headers :rows="$references" paginate>
         <x-slot:header>
-            <th>Autor(es)</th>
-            <th>Ano</th>
-            <th>Título</th>
-            <th>Tipo</th>
-            <th width="1">Citações</th>
-            <th width="1"></th>
-        </x-slot>
-        <x-slot:body>
-            @forelse ($references as $reference)
-                <tr>
-                    <td>{{ $reference->short_author }}</td>
-                    <td>{{ $reference->year }}{{ $reference->pivot->suffix ?? '' }}</td>
-                    <td>{{ $reference->title }}</td>
-                    <td>{{ $reference->type }}</td>
-                    <td>{{ $reference->citations_count }}</td>
-                    <td>
-                        <x-ts-dropdown icon="ellipsis-vertical" static>
-                            <x-ts-dropdown.items text="Ver citações" />
-                            <x-ts-dropdown.items wire:click="remove({{ $reference->id }})" text="Remover" separator />
-                        </x-ts-dropdown>
-                    </td>
-                </tr>
-            @empty
-                <div class="p-4">
-                    Nenhuma referência adicionada para esta produção.
-                </div>
-            @endforelse
-        </x-slot>
-        <x-slot:pagination>
-            {{ $references->links() }}
-        </x-slot>
-    </x-table>
+            <div class="table-header flex justify-end gap-2">
+                <x-ts-button text="Adicionar referência" x-on:click="$tsui.open.modal('reference-modal')" />
+                <x-ts-button text="Vincular existente" x-on:click="$tsui.open.modal('sync-modal')" flat />
+            </div>
+        </x-slot:header>
+        @interact('column_year', $row)
+            {{ $row->year }}{{ $row->pivot->suffix ?? '' }}
+        @endinteract
+        @interact('column_type', $row)
+            {{ $row->type }}
+        @endinteract
+        @interact('column_action', $row)
+            <x-ts-dropdown icon="ellipsis-vertical" static>
+                <x-ts-dropdown.items text="Ver citações" />
+                <x-ts-dropdown.items wire:click="remove({{ $row->id }})" text="Remover" separator />
+            </x-ts-dropdown>
+        @endinteract
+        <x-slot:empty>Nenhuma referência adicionada para esta produção.</x-slot:empty>
+    </x-ts-table>
     <x-ts-modal id="reference-modal" title="Adicionar/Editar referência" size="sm" wire="createModal">
         <form class="grid grid-cols-3 gap-4">
             <div class="col-span-2">

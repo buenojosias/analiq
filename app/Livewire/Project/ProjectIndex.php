@@ -13,14 +13,26 @@ class ProjectIndex extends Component
     {
         $this->projects = Project::query()
             ->with('student')
-            ->when(auth()->user()->admin, fn($q) => $q->with('user'))
+            ->when(auth()->user()->admin, fn ($q) => $q->with('user'))
             ->withCount('bibliometric')
             ->get();
     }
 
     public function render()
     {
-        return view('livewire.project.project-index')
+        $headers = [
+            ['index' => 'requested_at', 'label' => 'Data', 'sortable' => false],
+            ['index' => 'theme', 'label' => 'Tema', 'sortable' => false],
+            ['index' => 'student', 'label' => 'Estudante', 'sortable' => false],
+        ];
+
+        if (auth()->user()->admin) {
+            $headers[] = ['index' => 'user', 'label' => 'Usuário', 'sortable' => false];
+        }
+
+        $headers[] = ['index' => 'action', 'label' => '', 'sortable' => false];
+
+        return view('livewire.project.project-index', compact('headers'))
             ->title('Projetos');
     }
 }

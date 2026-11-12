@@ -8,53 +8,28 @@
         </div>
     </x-page-header>
 
-    <x-table>
+    <x-ts-table :$headers :rows="$this->groupProductions">
         @if ($group->description)
-            <p class="p-4 text-sm text-gray-800">{{ $group->description }}</p>
+            <x-slot:header>{{ $group->description }}</x-slot:header>
         @endif
-        <x-slot name="header">
-            <th>Título</th>
-            <th>Tipo</th>
-            <th>Autor(es)</th>
-            <th>Ano</th>
-            <th>OBS</th>
-            @if ($showAbstract)
-                <th>Resumo</th>
-            @endif
-            <th width="40"></th>
-        </x-slot>
-        <x-slot name="body">
-            @forelse ($this->groupProductions as $production)
-                <tr>
-                    <td class="!text-wrap">
-                        {{ $production->full_title }}
-                    </td>
-                    <td>{{ $production->type }}</td>
-                    <td class="!text-wrap">
-                        @foreach ($production->authors as $author)
-                            {{ $author->forename . ' ' . $author->lastname }}{!! !$loop->last ? ';<br>' : '' !!}
-                        @endforeach
-                    </td>
-                    <td>{{ $production->year }}</td>
-                    <td class="!text-wrap">{{ $production->pivot->note }}</td>
-                    @if ($showAbstract)
-                        <td class="!text-wrap">{{ $production->abstract->content ?? '' }}</td>
-                    @endif
-                    <td>
-                        <x-ts-button icon="eye" x-on:click="$dispatch('preview-production', { id: {{$production->id}} })" sm flat />
-                        <x-ts-button icon="link-slash" wire:click="detach({{ $production->id }})" color="red" flat
-                            sm />
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="6" class="text-center text-gray-500">
-                        Nenhuma produção adicionada ao grupo.
-                    </td>
-                </tr>
-            @endforelse
-        </x-slot>
-    </x-table>
+        @interact('column_type', $row)
+            {{ $row->type->value }}
+        @endinteract
+        @interact('column_authors', $row)
+            {{ $row->authors->map(fn ($author) => $author->forename.' '.$author->lastname)->join('; ') }}
+        @endinteract
+        @interact('column_note', $row)
+            {{ $row->pivot->note }}
+        @endinteract
+        @interact('column_abstract', $row)
+            {{ $row->abstract?->content }}
+        @endinteract
+        @interact('column_action', $row)
+            <x-ts-button icon="eye" x-on:click="$dispatch('preview-production', { id: {{ $row->id }} })" sm flat />
+            <x-ts-button icon="link-slash" wire:click="detach({{ $row->id }})" color="red" flat sm />
+        @endinteract
+        <x-slot:empty>Nenhuma produção adicionada ao grupo.</x-slot:empty>
+    </x-ts-table>
     @livewire('group.attach-production', ['project' => $project, 'group' => $group, 'groupProductions' => $this->groupProductions])
     @livewire('production.production-slide', ['project' => $project])
 </div>

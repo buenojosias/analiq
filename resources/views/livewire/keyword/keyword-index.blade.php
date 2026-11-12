@@ -4,50 +4,29 @@
     <div class="flex flex-col lg:flex-row-reverse gap-6">
         <div class="lg:w-2/3">
             @if ($selectedKeyword && $keywordProductions)
-                <x-table>
-                    <div class="px-4 py-2 flex justify-between gap-4 items-center text-gray-800 font-semibold">
-                        <h4>Publicações com a palavra-chave: {{ $selectedKeyword }}</h4>
-                        <x-ts-button wire:click="selectWord('')" icon="x-mark" flat />
-                    </div>
-                    <x-slot name="header">
-                        <th width="10">
+                <x-ts-table :headers="$productionHeaders" :rows="$keywordProductions">
+                    <x-slot:header>
+                        <div class="px-4 py-2 flex justify-between gap-4 items-center text-gray-800 font-semibold">
+                            <h4>Publicações com a palavra-chave: {{ $selectedKeyword }}</h4>
                             @livewire('components.bulk-dropdown', ['project' => $project])
-                        </th>
-                        <th>Título</th>
-                        <th>Tipo</th>
-                        <th>Ano</th>
-                        <th width="40%">Palavras-chave</th>
-                        <th width="1"></th>
-                    </x-slot>
-                    <x-slot name="body">
-                        @forelse ($keywordProductions as $production)
-                            <tr>
-                                <td>
-                                    @livewire('components.bulk-checkbox', ['production_id' => $production->id], key($production->id))
-                                </td>
-                                <td class="!text-wrap">{{ $production->full_title }}</td>
-                                <td>{{ $production->type }}</td>
-                                <td>{{ $production->year }}</td>
-                                <td class="!text-wrap">
-                                    @foreach ($production->keywords as $keyword)
-                                        {{ $keyword->value }}@if (!$loop->last)
-                                            ;
-                                        @endif
-                                    @endforeach
-                                </td>
-                                <td>
-                                    <x-ts-button icon="eye"
-                                        x-on:click="$dispatch('preview-production', { id: {{ $production->id }} })" sm
-                                        flat />
-                                    <x-ts-button wire:click="deleteProduction({{ $production }})"
-                                        icon="archive-box-arrow-down" color="red" flat sm />
-                                </td>
-                            </tr>
-                        @empty
-                            <div class="p-4 border-t">Palavra-chave não encontrada nas produções.</div>
-                        @endforelse
-                    </x-slot>
-                </x-table>
+                            <x-ts-button wire:click="selectWord('')" icon="x-mark" flat />
+                        </div>
+                    </x-slot:header>
+                    @interact('column_select', $row)
+                        @livewire('components.bulk-checkbox', ['production_id' => $row->id], key($row->id))
+                    @endinteract
+                    @interact('column_type', $row)
+                        {{ $row->type->value }}
+                    @endinteract
+                    @interact('column_keywords', $row)
+                        {{ $row->keywords->pluck('value')->join('; ') }}
+                    @endinteract
+                    @interact('column_action', $row)
+                        <x-ts-button icon="eye" x-on:click="$dispatch('preview-production', { id: {{ $row->id }} })" sm flat />
+                        <x-ts-button wire:click="deleteProduction({{ $row->id }})" icon="archive-box-arrow-down" color="red" flat sm />
+                    @endinteract
+                    <x-slot:empty>Palavra-chave não encontrada nas produções.</x-slot:empty>
+                </x-ts-table>
             @else
                 <x-ts-card>
                     Selecione uma palavra na tabela <span class="lg:hidden">abaixo</span> <span
@@ -56,7 +35,8 @@
             @endif
         </div>
         <div class="lg:w-1/3">
-            <x-table class="screen">
+            <x-ts-table :headers="$keywordHeaders" :rows="$keywordRows">
+                <x-slot:header>
                 <div class="px-4 py-2 flex justify-between gap-4 items-center text-gray-800 font-semibold">
                     <x-ts-dropdown>
                         <x-slot:action>
@@ -70,22 +50,11 @@
                         @endforeach
                     </x-ts-dropdown>
                 </div>
-                <x-slot name="header">
-                    <th class="cursor-pointer" wire:click="ksort">Palavra</th>
-                    <th class="cursor-pointer" wire:click="arsort">Produções</th>
-                </x-slot>
-                <x-slot name="body">
-                    @foreach ($keywords as $keyword => $productions)
-                        <tr>
-                            <td>
-                                <span class="cursor-pointer"
-                                    wire:click="selectWord('{{ $keyword }}')">{{ $keyword }}</span>
-                            </td>
-                            <td width="1" class="text-center">{{ $productions->count() }}</td>
-                        </tr>
-                    @endforeach
-                </x-slot>
-            </x-table>
+                </x-slot:header>
+                @interact('column_value', $row)
+                    <button type="button" wire:click="selectWord(@js($row['value']))">{{ $row['value'] }}</button>
+                @endinteract
+            </x-ts-table>
         </div>
     </div>
     @livewire('production.production-slide', ['project' => $project])

@@ -20,7 +20,7 @@ class WordRankingIndex extends Component
         foreach ($wordrankings as $wr) {
             $wr->productions_count = count($wr->records);
             $wr->total_count = 0;
-            foreach($wr->records as $record) {
+            foreach ($wr->records as $record) {
                 $wr->total_count += $record['count'];
             }
         }
@@ -30,7 +30,15 @@ class WordRankingIndex extends Component
 
     public function render()
     {
-        return view('livewire.word-ranking.word-ranking-index')
+        $headers = [
+            ['index' => 'title', 'label' => 'Título ou data', 'sortable' => false],
+            ['index' => 'sections', 'label' => 'Seções buscadas', 'sortable' => false],
+            ['index' => 'types', 'label' => 'Tipos de produção', 'sortable' => false],
+            ['index' => 'productions_count', 'label' => 'Produções encontradas', 'sortable' => false],
+            ['index' => 'total_count', 'label' => 'Contagem total', 'sortable' => false],
+        ];
+
+        return view('livewire.word-ranking.word-ranking-index', compact('headers'))
             ->title('Ranking de palavras');
     }
 }

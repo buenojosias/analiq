@@ -2,10 +2,8 @@
 
 namespace App\Livewire\Record;
 
-use App\Models\Production;
 use App\Models\Project;
 use App\Models\State;
-use Livewire\Attributes\Url;
 use Livewire\Component;
 
 class RecordPerState extends Component
@@ -30,16 +28,37 @@ class RecordPerState extends Component
             ->withCount([
                 'productions' => function ($query) {
                     $query->where('project_id', $this->project->id);
-                }
+                },
             ])
             ->orderBy('name')
             ->get();
 
         $groupByRegion = $this->states->groupBy('region');
-        $countByRegion = [];
+        $stateRows = $groupByRegion->flatMap(fn ($states, $region) => $states->map(fn ($state): array => [
+            'id' => $state->id,
+            'region' => $region,
+            'name' => $state->name,
+            'abbreviation' => $state->abbreviation,
+            'productions_count' => $state->productions_count,
+        ]))->values();
+        $stateProductionRows = collect($this->stateProductions)->flatMap(fn ($productions) => $productions)->values();
+        $stateHeaders = [
+            ['index' => 'name', 'label' => 'Estado', 'sortable' => false],
+            ['index' => 'productions_count', 'label' => 'Produções', 'sortable' => false, 'align' => 'center'],
+        ];
+        $productionHeaders = [
+            ['index' => 'city', 'label' => 'Cidade', 'sortable' => false],
+            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
+            ['index' => 'year', 'label' => 'Ano', 'sortable' => false],
+            ['index' => 'action', 'label' => '', 'sortable' => false],
+        ];
 
         return view('livewire.record.record-per-state', compact(
-            'groupByRegion'
+            'stateRows',
+            'stateProductionRows',
+            'stateHeaders',
+            'productionHeaders',
         ))
             ->title('Relatório por estado');
     }
@@ -54,6 +73,7 @@ class RecordPerState extends Component
 
         $stateProductions = $stateProductions->map(function ($production) {
             $production->city = $production->city ?? 'Cidade não informada';
+
             return $production;
         });
 

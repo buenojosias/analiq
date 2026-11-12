@@ -50,7 +50,16 @@ class WordCountShow extends Component
 
     public function render()
     {
-        return view('livewire.word-count.word-count-show')
-            ->title('Contagem de palavras: '. $this->wordcount->word);
+        $headers = [
+            ['index' => 'production', 'label' => 'Produção', 'sortable' => false],
+            ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
+            ['index' => 'section', 'label' => 'Seção', 'sortable' => false],
+            ['index' => 'count', 'label' => 'Contagem', 'sortable' => false],
+            ['index' => 'percentage', 'label' => 'Percentual', 'sortable' => false],
+            ['index' => 'action', 'label' => '', 'sortable' => false],
+        ];
+
+        return view('livewire.word-count.word-count-show', compact('headers'))
+            ->title('Contagem de palavras: '.$this->wordcount->word);
     }
 }

@@ -15,7 +15,7 @@ class DashboardIndex extends Component
 
     public function mount()
     {
-        $this->projects = Project::withCount(['productions' => function($q) {
+        $this->projects = Project::withCount(['productions' => function ($q) {
             $q->withoutGlobalScope(ProjectScope::class);
         }])->get();
         $this->students = Student::all();
@@ -23,6 +23,9 @@ class DashboardIndex extends Component
 
     public function render()
     {
-        return view('livewire.dashboard.dashboard-index');
+        $projectHeaders = [['index' => 'theme', 'label' => 'Projeto', 'sortable' => false]];
+        $studentHeaders = [['index' => 'name', 'label' => 'Estudante', 'sortable' => false]];
+
+        return view('livewire.dashboard.dashboard-index', compact('projectHeaders', 'studentHeaders'));
     }
 }

@@ -4,7 +4,6 @@ namespace App\Livewire\Record;
 
 use App\Models\Production;
 use App\Models\Project;
-use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class RecordPerAuthor extends Component
@@ -14,6 +13,7 @@ class RecordPerAuthor extends Component
     public $authors;
 
     public $selectedAuthor;
+
     public $selectedAuthorName;
 
     public $authorProductions = [];
@@ -39,7 +39,7 @@ class RecordPerAuthor extends Component
         $this->selectedAuthorName = $name;
 
         if ($this->selectedAuthor) {
-            $this->authorProductions = Production::whereHas('authors', function ($query) use ($ids) {
+            $this->authorProductions = Production::whereHas('authors', function ($query) {
                 $query->whereIn('id', $this->selectedAuthor);
             })->get();
         }
@@ -57,8 +57,24 @@ class RecordPerAuthor extends Component
                 ];
             });
 
-        return view('livewire.record.record-per-author')
+        $authorRows = $this->authors->map(fn (array $details, string $name): array => [
+            'name' => $name,
+            'productions_count' => $details['count'],
+            'ids' => $details['ids'],
+        ])->values();
+        $authorHeaders = [
+            ['index' => 'name', 'label' => 'Autor', 'sortable' => false],
+            ['index' => 'productions_count', 'label' => 'Produções', 'sortable' => false, 'align' => 'center'],
+        ];
+        $productionHeaders = [
+            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
+            ['index' => 'year', 'label' => 'Ano', 'sortable' => false],
+            ['index' => 'action', 'label' => '', 'sortable' => false],
+        ];
+
+        return view('livewire.record.record-per-author', compact('authorRows', 'authorHeaders', 'productionHeaders'))
             ->title('Relatório por autor');
-        ;
+
     }
 }

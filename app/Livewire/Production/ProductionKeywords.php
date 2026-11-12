@@ -13,6 +13,7 @@ class ProductionKeywords extends Component
     use Interactions;
 
     public $project;
+
     public $production;
 
     public $keywords = [];
@@ -27,9 +28,14 @@ class ProductionKeywords extends Component
 
     public function render()
     {
+        $headers = [
+            ['index' => 'value', 'label' => 'Palavra-chave', 'sortable' => false],
+            ['index' => 'action', 'label' => '', 'sortable' => false],
+        ];
+
         $this->keywords = $this->production->keywords;
 
-        return view('livewire.production.production-keywords')
+        return view('livewire.production.production-keywords', compact('headers'))
             ->layout('layouts.production')
             ->layoutData([
                 'title' => 'Palavras-chave da produção',
@@ -47,7 +53,7 @@ class ProductionKeywords extends Component
 
     public function deleteKeyword(Keyword $keyword)
     {
-        if($keyword->delete());
+        if ($keyword->delete());
         $this->toast()->success('Palavra-chave removida.')->send();
     }
 }

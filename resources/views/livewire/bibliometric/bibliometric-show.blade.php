@@ -22,24 +22,12 @@
         </div>
 
         <div class="col-span-3 space-y-6">
-            <x-table class="no-padding" label="Resultados">
-                @slot('header')
-                    <th>Tipo de produção</th>
-                    <th>Quantidade</th>
-                @endslot
-                @slot('body')
-                    @foreach ($types as $type)
-                        <tr>
-                            <td>{{ $type->type }}</td>
-                            <td>{{ $type->count }}</td>
-                        </tr>
-                    @endforeach
-                @endslot
-                @slot('footer')
+            <x-ts-table :$headers :rows="$types">
+                <x-slot:header>Resultados</x-slot:header>
+                <x-slot:footer>
                     <x-ts-link :href="route('project.bibliometrics.productions.index', $project)" wire:navigate>Ver todas</x-ts-link>
-                    {{-- <x-ts-link :href="route('researches.publications.create', $research)" wire:navigate>Adicionar nova</x-ts-link> --}}
-                @endslot
-            </x-table>
+                </x-slot:footer>
+            </x-ts-table>
 
             <div class="grid sm:grid-cols-2 gap-4">
                 @livewire('bibliometric.custom-fields', ['bibliometric' => $bibliometric])

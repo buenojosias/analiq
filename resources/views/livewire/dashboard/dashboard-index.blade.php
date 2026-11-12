@@ -29,30 +29,17 @@
 
     <div class="hidden flex gap-6">
         <div class="w-ful sm:w-1/2 space-y-4">
-            <x-table label="Meus projetos">
-                <x-slot name="body">
-                    @foreach ($projects as $project)
-                        <tr>
-                            <td>
-                                <a href="{{ route('project.show', $project) }}" wire:navigate>{{ $project->theme }}</a>
-                            </td>
-                        </tr>
-                    @endforeach
-                </x-slot>
-            </x-table>
+            <x-ts-table :headers="$projectHeaders" :rows="$projects">
+                <x-slot:header>Meus projetos</x-slot:header>
+                @interact('column_theme', $row)
+                    <a href="{{ route('project.show', $row) }}" wire:navigate>{{ $row->theme }}</a>
+                @endinteract
+            </x-ts-table>
         </div>
         <div class="w-ful sm:w-1/2 space-y-4">
-            <x-table label="Estudantes">
-                <x-slot name="body">
-                    @foreach ($students as $student)
-                        <tr>
-                            <td>
-                                <a href="#" wire:navigate>{{ $student->name }}</a>
-                            </td>
-                        </tr>
-                    @endforeach
-                </x-slot>
-            </x-table>
+            <x-ts-table :headers="$studentHeaders" :rows="$students">
+                <x-slot:header>Estudantes</x-slot:header>
+            </x-ts-table>
 
 
         </div>

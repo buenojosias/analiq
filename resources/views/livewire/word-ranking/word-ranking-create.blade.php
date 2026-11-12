@@ -51,33 +51,15 @@
                     </div>
                 @endif
             </div>
-            <x-table>
-                <x-slot name="header">
-                    <th>Palavra</th>
-                    <th>Ocorrências</th>
-                    <th>Produções</th>
-                    <th width="1"></th>
-                </x-slot>
-                <x-slot name="body">
-                    @if ($results)
-                        @foreach ($results as $word => $result)
-                            <tr>
-                                <td>{{ $word }}</td>
-                                <td>{{ $result['count'] }}</td>
-                                <td>{{ count($result['internals']) }}</td>
-                                <td>
-                                    <x-ts-dropdown text="Ações" position="bottom-end">
-                                        <x-ts-dropdown.items text="Ver contexto" />
-                                        <x-ts-dropdown.items wire:click="selectResult({{ $result['id'] }})"
-                                            text="Listar produções" />
-                                        <x-ts-dropdown.items text="Exluir" separator />
-                                    </x-ts-dropdown>
-                                </td>
-                            </tr>
-                        @endforeach
-                    @endif
-                </x-slot>
-            </x-table>
+            <x-ts-table :$headers :rows="$resultRows">
+                @interact('column_action', $row)
+                    <x-ts-dropdown text="Ações" position="bottom-end">
+                        <x-ts-dropdown.items text="Ver contexto" />
+                        <x-ts-dropdown.items wire:click="selectResult({{ $row['id'] }})" text="Listar produções" />
+                        <x-ts-dropdown.items text="Exluir" separator />
+                    </x-ts-dropdown>
+                @endinteract
+            </x-ts-table>
         </div>
 
         <div class="col-span-3">

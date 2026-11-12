@@ -20,12 +20,12 @@ class BibliometricShow extends Component
         $this->project = $project;
         $this->bibliometric = $project->bibliometric;
 
-        if (!$this->bibliometric) {
+        if (! $this->bibliometric) {
             redirect()->route('project.bibliometrics.create', $project);
         }
 
         if ($this->bibliometric) {
-            $this->bibliometric->period = $this->bibliometric->start_year . ' - ' . $this->bibliometric->end_year;
+            $this->bibliometric->period = $this->bibliometric->start_year.' - '.$this->bibliometric->end_year;
         }
 
         $this->types = $project->productions()
@@ -36,7 +36,12 @@ class BibliometricShow extends Component
 
     public function render()
     {
-        return view('livewire.bibliometric.bibliometric-show')
+        $headers = [
+            ['index' => 'type', 'label' => 'Tipo de produção', 'sortable' => false],
+            ['index' => 'count', 'label' => 'Quantidade', 'sortable' => false],
+        ];
+
+        return view('livewire.bibliometric.bibliometric-show', compact('headers'))
             ->title('Bibliometria');
     }
 }

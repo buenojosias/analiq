@@ -13,8 +13,11 @@ class TagIndex extends Component
     use Interactions;
 
     public $project;
+
     public $tags = [];
+
     public $selectedTag = null;
+
     public $commonTags = [];
 
     #[Validate('required|string', as: 'Nome da tag')]
@@ -56,7 +59,20 @@ class TagIndex extends Component
     public function render()
     {
         $this->loadTags();
-        return view('livewire.tag.tag-index');
+
+        $tagHeaders = [
+            ['index' => 'name', 'label' => 'Tag', 'sortable' => false],
+            ['index' => 'productions_count', 'label' => 'Produções', 'sortable' => false, 'align' => 'right'],
+        ];
+        $productionHeaders = [
+            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
+            ['index' => 'year', 'label' => 'Ano', 'sortable' => false],
+            ['index' => 'tags', 'label' => 'Tags', 'sortable' => false],
+            ['index' => 'action', 'label' => '', 'sortable' => false],
+        ];
+
+        return view('livewire.tag.tag-index', compact('tagHeaders', 'productionHeaders'));
     }
 
     public function selectTag(Tag $tag)

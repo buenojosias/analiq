@@ -91,36 +91,24 @@
     </div>
 
     <div x-show="showtable" x-transition>
-        <x-table label="Produções encontradas">
-            <x-slot name="header">
-                <th>produção</th>
-                <th>Tipo</th>
-                <th>Seção</th>
-                <th>Contagem</th>
-                <th>Percentual</th>
-                <th width="10"></th>
-            </x-slot>
-            <x-slot name="body">
-                @foreach ($records as $record)
-                    <tr>
-                        <td>
-                            <a
-                                href="{{ route('project.bibliometrics.productions.show', [$project, $record['production']['id']]) }}">
-                                {{ $record['production']['title'] }}
-                            </a>
-                        </td>
-                        <td>{{ $record['production']['type'] }}</td>
-                        <td>{{ $record['section'] }}</td>
-                        <td>{{ $record['count'] }}</td>
-                        <td>{{ $record['percentage'] }}%</td>
-                        <td>
-                            <x-ts-button icon="eye"
-                                x-on:click="$dispatch('preview-production', { id: {{ $record['production']['id'] }} })" sm flat />
-                        </td>
-                    </tr>
-                @endforeach
-            </x-slot>
-        </x-table>
+        <x-ts-table :$headers :rows="$records">
+            <x-slot:header>Produções encontradas</x-slot:header>
+            @interact('column_production', $row)
+                <a href="{{ route('project.bibliometrics.productions.show', [$project, $row['production']['id']]) }}">
+                    {{ $row['production']['title'] }}
+                </a>
+            @endinteract
+            @interact('column_type', $row)
+                {{ $row['production']['type'] }}
+            @endinteract
+            @interact('column_percentage', $row)
+                {{ $row['percentage'] }}%
+            @endinteract
+            @interact('column_action', $row)
+                <x-ts-button icon="eye"
+                    x-on:click="$dispatch('preview-production', { id: {{ $row['production']['id'] }} })" sm flat />
+            @endinteract
+        </x-ts-table>
     </div>
     @if ($content)
         <livewire:word-count.word-count-context :$content :$word />

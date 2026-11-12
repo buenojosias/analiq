@@ -7,32 +7,12 @@
             <x-ts-button :href="route('project.bibliometrics.wordcounts.create', $project)" wire:navigate text="Nova contagem" />
         </div>
     </div>
-    <x-table>
-        <x-slot name="header">
-            <th>Palavra consultada</th>
-            <th>Seções</th>
-            <th>Resultados</th>
-            <th>Contagem</th>
-        </x-slot>
-        <x-slot name="body">
-            @foreach ($wordcounts as $wc)
-                <tr>
-                    <td class="!text-wrap">
-                        <a href="{{ route('project.bibliometrics.wordcounts.show', [$project, $wc]) }}" wire:navigate>
-                            {{ $wc->word }}</td>
-                        </a>
-                    <td>
-                        @foreach ($wc->sections as $section)
-                            {{ $section === 'body' ? 'Conteúdo' : 'Resumo' }}
-                            @if (!$loop->last)
-                                /
-                            @endif
-                        @endforeach
-                    </td>
-                    <td>{{ $wc->productions_count }}</td>
-                    <td>{{ $wc->total_count }}</td>
-                </tr>
-            @endforeach
-        </x-slot>
-    </x-table>
+    <x-ts-table :$headers :rows="$wordcounts">
+        @interact('column_word', $row)
+            <a href="{{ route('project.bibliometrics.wordcounts.show', [$project, $row]) }}" wire:navigate>{{ $row->word }}</a>
+        @endinteract
+        @interact('column_sections', $row)
+            {{ collect($row->sections)->map(fn ($section) => $section === 'body' ? 'Conteúdo' : 'Resumo')->join(' / ') }}
+        @endinteract
+    </x-ts-table>
 </section>

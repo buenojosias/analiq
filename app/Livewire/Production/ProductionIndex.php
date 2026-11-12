@@ -38,13 +38,34 @@ class ProductionIndex extends Component
     public $productions;
 
     public $has_monographies;
+
     public $has_periodicals;
+
     public $show_deleted = false;
+
     public $once;
+
     public $periodicals;
+
     public $states;
+
     public $regions;
+
     public $highlighted = false;
+
+    public array $visibleColumns = [
+        'author' => false,
+        'year' => true,
+        'type' => true,
+        'repository' => false,
+        'descriptors' => false,
+        'periodical' => false,
+        'institution' => false,
+        'program' => false,
+        'city' => false,
+        'state' => false,
+        'url' => false,
+    ];
 
     public function mount(Project $project)
     {
@@ -66,8 +87,34 @@ class ProductionIndex extends Component
 
     public function render()
     {
+        $headers = [
+            ['index' => 'select', 'label' => '', 'sortable' => false],
+            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+        ];
+        $optionalColumns = [
+            'author' => 'Autor(es)',
+            'year' => 'Ano',
+            'type' => 'Tipo',
+            'repository' => 'Repositório',
+            'descriptors' => 'Descritores',
+            'periodical' => 'Periódico',
+            'institution' => 'Instituição',
+            'program' => 'Programa',
+            'city' => 'Cidade',
+            'state' => 'UF',
+            'url' => 'URL',
+        ];
+
+        foreach ($optionalColumns as $index => $label) {
+            if ($this->visibleColumns[$index]) {
+                $headers[] = ['index' => $index, 'label' => $label, 'sortable' => false];
+            }
+        }
+
+        $headers[] = ['index' => 'action', 'label' => '', 'sortable' => false];
+
         $this->productions = $this->project->productions()
-            ->when($this->q, function($query) {
+            ->when($this->q, function ($query) {
                 $query->whereAny(['title', 'subtitle'], 'like', "%$this->q%");
             })
             ->when($this->anos, function ($query) {
@@ -94,20 +141,20 @@ class ProductionIndex extends Component
             ->when($this->show_deleted, function ($query) {
                 $query->withTrashed();
             })
-            ->when($this->highlighted, function($query) {
+            ->when($this->highlighted, function ($query) {
                 $query->whereHighlighted(true);
             })
             ->with(['state', 'authors'])
             ->orderBy('title')
             ->get();
 
-            if ($this->once) {
-                $this->registerStates();
-                $this->registerPeriodicals();
-                $this->once = false;
-            }
+        if ($this->once) {
+            $this->registerStates();
+            $this->registerPeriodicals();
+            $this->once = false;
+        }
 
-        return view('livewire.production.production-index')
+        return view('livewire.production.production-index', compact('headers'))
             ->title('Produções encontradas');
     }
 
@@ -128,5 +175,4 @@ class ProductionIndex extends Component
             ->unique()
             ->toArray();
     }
-
 }

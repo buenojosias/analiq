@@ -20,7 +20,7 @@ class ReferenceShow extends Component
         $this->reference = $this->project->references()->findOrFail($reference);
 
         $this->productions = $this->reference->productions()
-            ->withCount(['citations' => function($q){
+            ->withCount(['citations' => function ($q) {
                 $q->where('reference_id', $this->reference->id);
             }])
             ->get();
@@ -28,7 +28,12 @@ class ReferenceShow extends Component
 
     public function render()
     {
-        return view('livewire.reference.reference-show')
+        $headers = [
+            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'citations_count', 'label' => 'Citações', 'sortable' => false],
+        ];
+
+        return view('livewire.reference.reference-show', compact('headers'))
             ->title('Detalhes da referência');
     }
 }

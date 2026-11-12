@@ -15,13 +15,19 @@ class SearchResultIndex extends Component
     public $modal = false;
 
     public $project;
+
     public $bibliometric;
+
     public $bibliometricTypes = [];
+
     public $bibliometricRepositories = [];
 
     public $bibliometricLanguages = [];
+
     public $bibliometricTerms = [];
+
     public $bibliometricYears = [];
+
     public $avaliableSections = [];
 
     #[Validate('required|string|in_array:bibliometric.repositories.*')]
@@ -71,6 +77,7 @@ class SearchResultIndex extends Component
         $groupedByWords = $results->groupBy(function ($result) {
             $words = $result->terms;
             sort($words);
+
             return json_encode($words);
         });
 
@@ -83,12 +90,12 @@ class SearchResultIndex extends Component
         $years = $this->bibliometricYears;
         $repositories = $this->bibliometricRepositories;
 
-        foreach($years as $year) {
+        foreach ($years as $year) {
             $yearTotals[$year] = 0;
         }
         $yearTotals['total'] = 0;
 
-        foreach($repositories as $repository) {
+        foreach ($repositories as $repository) {
             $repositoryTotals[$repository] = 0;
         }
         $repositoryTotals['total'] = 0;
@@ -128,7 +135,61 @@ class SearchResultIndex extends Component
         }
         // END RESULTS BY DESCRIPTOR
 
-        return view('livewire.search-result.search-result-index', compact('results', 'tableByRepository', 'repositories', 'repositoryTotals', 'tableByYear', 'years', 'yearTotals'))
+        $detailHeaders = [
+            ['index' => 'repository', 'label' => 'Repositório', 'sortable' => false],
+            ['index' => 'terms', 'label' => 'Palavras buscadas', 'sortable' => false],
+            ['index' => 'sections', 'label' => 'Seções buscadas', 'sortable' => false],
+            ['index' => 'types', 'label' => 'Tipos', 'sortable' => false],
+            ['index' => 'language', 'label' => 'Idioma', 'sortable' => false],
+            ['index' => 'year', 'label' => 'Ano', 'sortable' => false],
+            ['index' => 'quantity', 'label' => 'Resultados', 'sortable' => false],
+            ['index' => 'action', 'label' => '', 'sortable' => false],
+        ];
+        $repositoryDetailHeaders = array_values(array_filter($detailHeaders, fn (array $header): bool => in_array($header['index'], ['terms', 'sections', 'types', 'year', 'quantity'])));
+        $buildMatrix = function (array $labels, array $data, array $totals): array {
+            $headers = [['index' => 'label', 'label' => 'Descritores', 'sortable' => false]];
+
+            foreach ($labels as $index => $label) {
+                $headers[] = ['index' => 'value_'.$index, 'label' => (string) $label, 'sortable' => false, 'align' => 'center'];
+            }
+
+            $headers[] = ['index' => 'total', 'label' => 'Total', 'sortable' => false, 'align' => 'center'];
+            $rows = [];
+
+            foreach ($data as $name => $values) {
+                $row = ['label' => $name, 'total' => $values['total'] ?? 0];
+
+                foreach ($labels as $index => $label) {
+                    $row['value_'.$index] = $values[$label] ?? 0;
+                }
+
+                $rows[] = $row;
+            }
+
+            if ($rows !== []) {
+                $totalRow = ['label' => 'Total', 'total' => $totals['total']];
+
+                foreach ($labels as $index => $label) {
+                    $totalRow['value_'.$index] = $totals[$label] ?? 0;
+                }
+
+                $rows[] = $totalRow;
+            }
+
+            return [$headers, $rows];
+        };
+        [$repositoryMatrixHeaders, $repositoryMatrixRows] = $buildMatrix($repositories, $tableByRepository, $repositoryTotals);
+        [$yearMatrixHeaders, $yearMatrixRows] = $buildMatrix($years, $tableByYear, $yearTotals);
+
+        return view('livewire.search-result.search-result-index', compact(
+            'results',
+            'detailHeaders',
+            'repositoryDetailHeaders',
+            'repositoryMatrixHeaders',
+            'repositoryMatrixRows',
+            'yearMatrixHeaders',
+            'yearMatrixRows',
+        ))
             ->title('Resultado preliminar');
     }
 

@@ -15,6 +15,7 @@ class ProductionReference extends Component
     use WithPagination;
 
     public $project;
+
     public $production;
 
     public $avaliable_types = [];
@@ -59,8 +60,17 @@ class ProductionReference extends Component
 
     public function render()
     {
+        $headers = [
+            ['index' => 'short_author', 'label' => 'Autor(es)', 'sortable' => false],
+            ['index' => 'year', 'label' => 'Ano', 'sortable' => false],
+            ['index' => 'title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
+            ['index' => 'citations_count', 'label' => 'Citações', 'sortable' => false],
+            ['index' => 'action', 'label' => '', 'sortable' => false],
+        ];
+
         $references = $this->production->references()
-            ->withCount(['citations' => function($q) {
+            ->withCount(['citations' => function ($q) {
                 $q->where('production_id', $this->production->id);
             }])
             ->orderBy('short_author')
@@ -70,12 +80,11 @@ class ProductionReference extends Component
         if ($this->search_other) {
             $this->other_references = $this->project->references()
                 ->whereNotIn('id', $references->pluck('id'))
-                ->where('title', 'like', '%' . $this->search_other . '%')
+                ->where('title', 'like', '%'.$this->search_other.'%')
                 ->get();
         }
 
-
-        return view('livewire.production.production-reference', compact('references'))
+        return view('livewire.production.production-reference', compact('references', 'headers'))
             ->layout('layouts.production')
             ->layoutData([
                 'title' => 'Referências da produção',

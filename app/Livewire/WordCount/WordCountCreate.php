@@ -47,7 +47,7 @@ class WordCountCreate extends Component
         $this->word = trim($this->word);
         $results = Internal::query()
             ->with('production')
-            ->whereHas('production', function($query) {
+            ->whereHas('production', function ($query) {
                 $query->whereIn('type', $this->production_types)
                     ->where('project_id', $this->project->id);
             })
@@ -72,9 +72,10 @@ class WordCountCreate extends Component
             $content = $this->removeCharacters($result->content);
 
             // $result->count = substr_count(strtoupper($result->content), strtoupper(' '.$this->word.' '));
-            $result->count = preg_match_all('/\b' . preg_quote($word, '/') . '\b/i', $content);
+            $result->count = preg_match_all('/\b'.preg_quote($word, '/').'\b/i', $content);
             $percentage = $result->count * 100 / $result->total_words;
             $result->percentage = number_format($percentage, 2, ',', '.');
+
             return $result;
         });
     }
@@ -82,7 +83,7 @@ class WordCountCreate extends Component
     public function save()
     {
         foreach ($this->results as $result) {
-            $count = preg_match_all('/\b' . preg_quote($this->word, '/') . '\b/i', $result->content);
+            $count = preg_match_all('/\b'.preg_quote($this->word, '/').'\b/i', $result->content);
             $percent = $count * 100 / $result->total_words;
             $percentage = number_format($percent, 2, '.', ',');
             $record = [
@@ -137,12 +138,21 @@ class WordCountCreate extends Component
 
     public function render()
     {
-        return view('livewire.word-count.word-count-create')
+        $headers = [
+            ['index' => 'production', 'label' => 'Produção', 'sortable' => false],
+            ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
+            ['index' => 'section', 'label' => 'Seção', 'sortable' => false],
+            ['index' => 'count', 'label' => 'Contagem', 'sortable' => false],
+            ['index' => 'percentage', 'label' => 'Percentual', 'sortable' => false],
+            ['index' => 'action', 'label' => '', 'sortable' => false],
+        ];
+
+        return view('livewire.word-count.word-count-create', compact('headers'))
             ->title('Nova contagem de palavras');
     }
 
     public function removeCharacters($value)
     {
-        return preg_replace(array("/(á|à|ã|â|ä)/", "/(Á|À|Ã|Â|Ä)/", "/(é|è|ê|ë)/", "/(É|È|Ê|Ë)/", "/(í|ì|î|ï)/", "/(Í|Ì|Î|Ï)/", "/(ó|ò|õ|ô|ö)/", "/(Ó|Ò|Õ|Ô|Ö)/", "/(ú|ù|û|ü)/", "/(Ú|Ù|Û|Ü)/", "/(ñ)/", "/(Ñ)/"), explode(" ", "a A e E i I o O u U n N"), $value);
+        return preg_replace(['/(á|à|ã|â|ä)/', '/(Á|À|Ã|Â|Ä)/', '/(é|è|ê|ë)/', '/(É|È|Ê|Ë)/', '/(í|ì|î|ï)/', '/(Í|Ì|Î|Ï)/', '/(ó|ò|õ|ô|ö)/', '/(Ó|Ò|Õ|Ô|Ö)/', '/(ú|ù|û|ü)/', '/(Ú|Ù|Û|Ü)/', '/(ñ)/', '/(Ñ)/'], explode(' ', 'a A e E i I o O u U n N'), $value);
     }
 }

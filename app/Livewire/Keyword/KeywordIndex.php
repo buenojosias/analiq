@@ -27,8 +27,9 @@ class KeywordIndex extends Component
 
         $this->bibliometric = $project->bibliometric;
 
-        if ($this->selectedKeyword)
+        if ($this->selectedKeyword) {
             $this->selectWord($this->selectedKeyword);
+        }
     }
 
     // public function sort_by_value()
@@ -54,7 +55,7 @@ class KeywordIndex extends Component
             })
             ->with('keywords')
             ->get();
-        }
+    }
 
     public function deleteProduction($id)
     {
@@ -76,11 +77,29 @@ class KeywordIndex extends Component
 
         $keywords = $keywords->map(function ($keyword) {
             $keyword->value = ucfirst($keyword->value);
+
             return $keyword;
         });
 
-        $keywords = $keywords->sortBy('value')->groupBy('value')->all();
+        $keywordRows = $keywords->sortBy('value')->groupBy('value')
+            ->map(fn ($productions, $keyword): array => [
+                'value' => $keyword,
+                'productions_count' => $productions->count(),
+            ])
+            ->values();
+        $keywordHeaders = [
+            ['index' => 'value', 'label' => 'Palavra', 'sortable' => false],
+            ['index' => 'productions_count', 'label' => 'Produções', 'sortable' => false, 'align' => 'center'],
+        ];
+        $productionHeaders = [
+            ['index' => 'select', 'label' => '', 'sortable' => false],
+            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
+            ['index' => 'year', 'label' => 'Ano', 'sortable' => false],
+            ['index' => 'keywords', 'label' => 'Palavras-chave', 'sortable' => false],
+            ['index' => 'action', 'label' => '', 'sortable' => false],
+        ];
 
-        return view('livewire.keyword.keyword-index', compact('keywords'));
+        return view('livewire.keyword.keyword-index', compact('keywordRows', 'keywordHeaders', 'productionHeaders'));
     }
 }

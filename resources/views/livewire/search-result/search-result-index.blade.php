@@ -5,169 +5,54 @@
         <x-ts-button text="Adicionar resultado" wire:click="$toggle('modal')" />
     </x-page-header>
 
-    <x-table label="Tabela detalhada" collapsable>
-        <div x-show="false">
-            <x-slot:header>
-                <th>Repositório</th>
-                <th>Palavras buscadas</th>
-                <th>Seções buscadas</th>
-                <th>Tipos</th>
-                <th>Idioma</th>
-                <th>Ano</th>
-                <th>Resultados</th>
-                <th></th>
-            </x-slot>
-            <x-slot:body>
-                @foreach ($results->sortBy('repository') as $result)
-                    <tr>
-                        <td>{{ $result->repository }}</td>
-                        <td class="!text-wrap">
-                            @foreach ($result->terms as $term)
-                                {{ $term }}
-                                @if (!$loop->last)
-                                    AND
-                                @endif
-                            @endforeach
-                        </td>
-                        <td>
-                            @foreach ($result->sections as $section)
-                                {{ $section }}
-                                @if (!$loop->last)
-                                    /
-                                @endif
-                            @endforeach
-                        </td>
-                        <td>
-                            @foreach ($result->types as $type)
-                                {{ $type }}
-                                @if (!$loop->last)
-                                    /
-                                @endif
-                            @endforeach
-                        </td>
-                        <td>{{ $result->language }}</td>
-                        <td>{{ $result->year }}</td>
-                        <td>{{ $result->quantity }}</td>
-                        <td>
-                            <x-ts-button icon="trash" wire:click="delete({{ $result->id }})" color="red" sm flat />
-                        </td>
-                    </tr>
-                @endforeach
-            </x-slot:body>
+    <div x-data="{ expanded: false }">
+        <x-ts-button x-on:click="expanded = !expanded" text="Tabela detalhada" icon="chevron-down" flat />
+        <div x-show="expanded" x-collapse>
+            <x-ts-table :headers="$detailHeaders" :rows="$results->sortBy('repository')">
+                @interact('column_terms', $row)
+                    {{ collect($row->terms)->join(' AND ') }}
+                @endinteract
+                @interact('column_sections', $row)
+                    {{ collect($row->sections)->join(' / ') }}
+                @endinteract
+                @interact('column_types', $row)
+                    {{ collect($row->types)->join(' / ') }}
+                @endinteract
+                @interact('column_action', $row)
+                    <x-ts-button icon="trash" wire:click="delete({{ $row->id }})" color="red" sm flat />
+                @endinteract
+            </x-ts-table>
         </div>
-    </x-table>
+    </div>
 
     <div class="mt-6 md:grid grid-cols-2 gap-6">
-        <x-table label="Lista por repositórios" class="mb-6">
-            <x-slot name="header">
-                <tr>
-                    <th>Descritores</th>
-                    @foreach ($repositories as $repository)
-                        <th class="text-center">{{ $repository }}</th>
-                    @endforeach
-                    <th class="text-center">Total</th>
-                </tr>
-            </x-slot>
-            <x-slot name="body">
-                @if ($tableByRepository)
-                    @foreach ($tableByRepository as $word => $repositories)
-                        <tr>
-                            <td class="!text-wrap">{{ $word }}</td>
-                            @foreach ($repositories as $repository)
-                                <td class="text-center">{{ $repository ?? 0 }}</td>
-                            @endforeach
-                        </tr>
-                    @endforeach
-                    <tr>
-                        <td class="font-semibold">Total</td>
-                        @foreach ($repositories as $key => $repository)
-                            <td class="text-center font-semibold">{{ $repositoryTotals[$key] }}</td>
-                        @endforeach
-                    </tr>
-                @else
-                    <div class="p-4 text-center text-sm">Nada adicionado</div>
-                @endif
-            </x-slot>
-        </x-table>
+        <x-ts-table :headers="$repositoryMatrixHeaders" :rows="$repositoryMatrixRows">
+            <x-slot:header>Lista por repositórios</x-slot:header>
+            <x-slot:empty>Nada adicionado</x-slot:empty>
+        </x-ts-table>
 
-        <x-table label="Lista por anos" class="mb-6">
-            <x-slot name="header">
-                <tr>
-                    <th>Descritores</th>
-                    @foreach ($years as $year)
-                        <th class="text-center">{{ $year }}</th>
-                    @endforeach
-                    <th class="text-center">Total</th>
-                </tr>
-            </x-slot>
-            <x-slot name="body">
-                @if ($tableByYear)
-                    @foreach ($tableByYear as $word => $years)
-                        <tr>
-                            <td class="!text-wrap">{{ $word }}</td>
-                            @foreach ($years as $year)
-                                <td class="text-center">{{ $year ?? 0 }}</td>
-                            @endforeach
-                        </tr>
-                    @endforeach
-                    <tr>
-                        <td class="font-semibold">Total</td>
-                        @foreach ($years as $key => $year)
-                            <td class="text-center font-semibold">{{ $yearTotals[$key] }}</td>
-                        @endforeach
-                    </tr>
-                @else
-                    <div class="p-4 text-center text-sm">Nada adicionado</div>
-                @endif
-            </x-slot>
-        </x-table>
+        <x-ts-table :headers="$yearMatrixHeaders" :rows="$yearMatrixRows">
+            <x-slot:header>Lista por anos</x-slot:header>
+            <x-slot:empty>Nada adicionado</x-slot:empty>
+        </x-ts-table>
 
         <div class="col-span-2">
             <h2 class="text-lg font-semibold">Detalhamento dos repositórios</h2>
         </div>
 
         @forelse ($results->groupBy('repository') as $repository => $items)
-            <x-table :label="$repository" class="mb-6">
-                <x-slot:header>
-                    <th>Descritores</th>
-                    <th>Seções buscadas</th>
-                    <th>Tipos buscados</th>
-                    <th>Ano</th>
-                    <th>Resultados</th>
-                </x-slot>
-                <x-slot:body>
-                    @foreach ($items as $result)
-                        <tr>
-                            <td class="!text-wrap">
-                                @foreach ($result->terms as $term)
-                                    {{ $term }}
-                                    @if (!$loop->last)
-                                        AND
-                                    @endif
-                                @endforeach
-                            </td>
-                            <td>
-                                @foreach ($result->sections as $section)
-                                    {{ $section }}
-                                    @if (!$loop->last)
-                                        /
-                                    @endif
-                                @endforeach
-                            </td>
-                            <td>
-                                @foreach ($result->types as $type)
-                                    {{ $type }}
-                                    @if (!$loop->last)
-                                        /
-                                    @endif
-                                @endforeach
-                            </td>
-                            <td>{{ $result->year ?? '-' }}</td>
-                            <td>{{ $result->quantity }}</td>
-                        </tr>
-                    @endforeach
-                </x-slot>
-            </x-table>
+            <x-ts-table :headers="$repositoryDetailHeaders" :rows="$items">
+                <x-slot:header>{{ $repository }}</x-slot:header>
+                @interact('column_terms', $row)
+                    {{ collect($row->terms)->join(' AND ') }}
+                @endinteract
+                @interact('column_sections', $row)
+                    {{ collect($row->sections)->join(' / ') }}
+                @endinteract
+                @interact('column_types', $row)
+                    {{ collect($row->types)->join(' / ') }}
+                @endinteract
+            </x-ts-table>
         @empty
             <x-ts-card>
                 <div class="text-center text-sm">Nada adicionado</div>

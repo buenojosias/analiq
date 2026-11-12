@@ -16,37 +16,19 @@
         </ul>
     @endforeach --}}
 
-    <x-table>
-        <div class="table-header flex justify-between items-center">
-            <div class="w-1/2">
-                <x-ts-input wire:model.live.debounce="q" placehoder="Buscar citação" icon="magnifying-glass" />
-            </div>
-        </div>
+    <x-ts-table :$headers :rows="$citations" paginate>
         <x-slot:header>
-            <th>Tipo</th>
-            <th>Citação</th>
-            <th>Produção</th>
-            <th></th>
+            <div class="table-header flex justify-between items-center">
+                <div class="w-1/2">
+                    <x-ts-input wire:model.live.debounce="q" placehoder="Buscar citação" icon="magnifying-glass" />
+                </div>
+            </div>
         </x-slot>
-        <x-slot:body>
-            @foreach ($citations as $citation)
-                <tr>
-                    <td>{{ $citation->type }}</td>
-                    <td class="!text-wrap">
-                        {{ $citation->content }}
-                    </td>
-                    <td class="!text-wrap">
-                        {{ $citation->production->subtitle ? $citation->production->title . ': ' . $citation->production->subtitle : $citation->production->title }}
-                        ({{ $citation->production->year }})
-                    </td>
-                    <td>
-                        <x-ts-link :href="route('project.bibliometrics.productions.show', [$project, $citation->production])" wire:navigate icon="arrow-top-right-on-square" />
-                    </td>
-                </tr>
-            @endforeach
-        </x-slot>
-        <x-slot:pagination>
-            {{ $citations->links() }}
-        </x-slot>
-    </x-table>
+        @interact('column_production', $row)
+            {{ $row->production->full_title }} ({{ $row->production->year }})
+        @endinteract
+        @interact('column_action', $row)
+            <x-ts-link :href="route('project.bibliometrics.productions.show', [$project, $row->production])" wire:navigate icon="arrow-top-right-on-square" />
+        @endinteract
+    </x-ts-table>
 </div>

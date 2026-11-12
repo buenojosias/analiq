@@ -9,8 +9,11 @@ use Livewire\Component;
 class RecordPerYear extends Component
 {
     public $project;
+
     public $productions = [];
+
     public $selectedYear = '';
+
     public $yearProductions = [];
 
     public function mount(Project $project)
@@ -23,6 +26,7 @@ class RecordPerYear extends Component
             ->get()
             ->sortBy('year');
     }
+
     public function render()
     {
         $productionsByYear = $this->productions->groupBy('year');
@@ -74,7 +78,7 @@ class RecordPerYear extends Component
 
             foreach ($states as $state) {
                 if ($state === null) {
-                    $count = $group->whereNull('state_id')->filter(function ($production) use ($state) {
+                    $count = $group->whereNull('state_id')->filter(function ($production) {
                         return true;
                     })->count();
                 } else {
@@ -88,12 +92,29 @@ class RecordPerYear extends Component
             }
         }
 
+        $yearRows = $productionsByYear->map(fn ($productions, $year): array => [
+            'year' => $year,
+            'productions_count' => $productions->count(),
+        ])->values();
+        $yearHeaders = [
+            ['index' => 'year', 'label' => 'Ano', 'sortable' => false],
+            ['index' => 'productions_count', 'label' => 'Produções', 'sortable' => false],
+        ];
+        $productionHeaders = [
+            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
+            ['index' => 'year', 'label' => 'Ano', 'sortable' => false],
+            ['index' => 'action', 'label' => '', 'sortable' => false],
+        ];
+        $typeMatrix = TableMatrix::build('Tipos de produção', $years, $tableByType, $typeTotals);
+        $stateMatrix = TableMatrix::build('Estado', $years, $tableByState, $stateTotals);
+
         return view('livewire.record.record-per-year', compact(
-            'productionsByYear',
-            'years',
-            'types', 'states',
-            'tableByType', 'tableByState',
-            'typeTotals', 'stateTotals'
+            'yearRows',
+            'yearHeaders',
+            'productionHeaders',
+            'typeMatrix',
+            'stateMatrix',
         ))
             ->title('Relatório por ano');
     }

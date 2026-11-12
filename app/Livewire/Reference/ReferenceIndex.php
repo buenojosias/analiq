@@ -22,6 +22,16 @@ class ReferenceIndex extends Component
 
     public function render()
     {
+        $headers = [
+            ['index' => 'short_author', 'label' => 'Autor(es)', 'sortable' => false],
+            ['index' => 'year', 'label' => 'Ano', 'sortable' => false],
+            ['index' => 'title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
+            ['index' => 'productions_count', 'label' => 'Produções', 'sortable' => false, 'align' => 'center'],
+            ['index' => 'citations_count', 'label' => 'Citações', 'sortable' => false, 'align' => 'center'],
+            ['index' => 'action', 'label' => '', 'sortable' => false],
+        ];
+
         $references = $this->project->references()
             ->whereAny(['title', 'short_author'], 'like', "%$this->q%")
             ->withCount(['productions', 'citations'])
@@ -29,7 +39,7 @@ class ReferenceIndex extends Component
             ->orderBy('year')
             ->paginate();
 
-        return view('livewire.reference.reference-index', compact('references'))
+        return view('livewire.reference.reference-index', compact('references', 'headers'))
             ->title('Referências');
     }
 }

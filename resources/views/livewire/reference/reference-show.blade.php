@@ -18,22 +18,9 @@
             </x-ts-card>
         </div>
         <div class="col-span-3">
-            <x-table label="Produções com a referência">
-                <x-slot:header>
-                    <th>Título</th>
-                    <th width="1">Citações</th>
-                </x-slot>
-                <x-slot:body>
-                    @foreach ($productions as $production)
-                        <tr>
-                            <td>
-                                {{ $production->subtitle ? $production->title . ': ' . $production->subtitle : $production->title }}
-                            </td>
-                            <td>{{ $production->citations_count }}</td>
-                        </tr>
-                    @endforeach
-                </x-slot>
-            </x-table>
+            <x-ts-table :$headers :rows="$productions">
+                <x-slot:header>Produções com a referência</x-slot:header>
+            </x-ts-table>
         </div>
     </div>
 </div>

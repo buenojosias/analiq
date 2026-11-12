@@ -13,7 +13,9 @@ class GroupShow extends Component
     use Interactions;
 
     public $project;
+
     public $group;
+
     public $showAbstract = false;
     // public $groupProductions = [];
 
@@ -41,7 +43,21 @@ class GroupShow extends Component
 
     public function render()
     {
-        return view('livewire.group.group-show')
+        $headers = [
+            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
+            ['index' => 'authors', 'label' => 'Autor(es)', 'sortable' => false],
+            ['index' => 'year', 'label' => 'Ano', 'sortable' => false],
+            ['index' => 'note', 'label' => 'OBS', 'sortable' => false],
+        ];
+
+        if ($this->showAbstract) {
+            $headers[] = ['index' => 'abstract', 'label' => 'Resumo', 'sortable' => false];
+        }
+
+        $headers[] = ['index' => 'action', 'label' => '', 'sortable' => false];
+
+        return view('livewire.group.group-show', compact('headers'))
             ->title('Grupo de produções');
     }
 

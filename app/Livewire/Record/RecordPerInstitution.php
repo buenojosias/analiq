@@ -85,14 +85,31 @@ class RecordPerInstitution extends Component
             $typeTotals['total'] += $typeTotal;
         }
 
-        return view(
-            'livewire.record.record-per-institution',
-                compact(
-                    'productionsByInstitution',
-                    'years', 'tableByYear', 'yearTotals',
-                    'types', 'tableByType', 'typeTotals',
-                )
-            )
+        $institutionRows = $productionsByInstitution->map(fn ($productions, $institution): array => [
+            'name' => $institution === '' ? 'Não informada' : $institution,
+            'key' => $institution,
+            'productions_count' => $productions->count(),
+        ])->values();
+        $groupHeaders = [
+            ['index' => 'name', 'label' => 'Instituição', 'sortable' => false],
+            ['index' => 'productions_count', 'label' => 'Produções', 'sortable' => false],
+        ];
+        $productionHeaders = [
+            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
+            ['index' => 'year', 'label' => 'Ano', 'sortable' => false],
+            ['index' => 'action', 'label' => '', 'sortable' => false],
+        ];
+        $yearMatrix = TableMatrix::build('Instituições', $years, $tableByYear, columnTotals: $yearTotals);
+        $typeMatrix = TableMatrix::build('Instituições', $types, $tableByType, columnTotals: $typeTotals);
+
+        return view('livewire.record.record-per-institution', compact(
+            'institutionRows',
+            'groupHeaders',
+            'productionHeaders',
+            'yearMatrix',
+            'typeMatrix',
+        ))
             ->title('Relatório por instituição');
     }
 

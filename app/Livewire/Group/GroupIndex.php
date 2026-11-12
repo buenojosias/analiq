@@ -30,7 +30,13 @@ class GroupIndex extends Component
 
     public function render()
     {
-        return view('livewire.group.group-index')
+        $headers = [
+            ['index' => 'name', 'label' => 'Nome/descrição', 'sortable' => false],
+            ['index' => 'productions_count', 'label' => 'Produções', 'sortable' => false],
+            ['index' => 'action', 'label' => '', 'sortable' => false],
+        ];
+
+        return view('livewire.group.group-index', compact('headers'))
             ->title('Grupos de produções');
     }
 }

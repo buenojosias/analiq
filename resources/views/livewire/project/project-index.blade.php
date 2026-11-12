@@ -2,38 +2,26 @@
     <x-page-header title="Projetos">
         <x-ts-button text="Novo projeto" x-on:click="$wire.dispatch('open-form-modal')" />
     </x-page-header>
-    <x-table>
-        <x-slot name="header">
-            <th>Data</th>
-            <th>Tema</th>
-            <th>Estudante</th>
-            @if (auth()->user()->admin)
-                <th>Usuário</th>
+    <x-ts-table :$headers :rows="$projects">
+        @interact('column_requested_at', $row)
+            {{ $row->requested_at->format('d/m/Y') }}
+        @endinteract
+        @interact('column_theme', $row)
+            <a href="{{ route('project.show', $row) }}">{{ $row->theme }}</a>
+        @endinteract
+        @interact('column_student', $row)
+            {{ $row->student?->name }}
+        @endinteract
+        @interact('column_user', $row)
+            {{ $row->user?->name }}
+        @endinteract
+        @interact('column_action', $row)
+            @if ($row->bibliometric_count > 0)
+                <x-ts-link :href="route('project.bibliometrics.show', $row)" icon="book-open" />
+            @else
+                <x-ts-icon name="book-open" class="h-4" color="gray" />
             @endif
-            <th width="1"></th>
-        </x-slot>
-        <x-slot name="body">
-            @foreach ($projects as $project)
-                <tr>
-                    <td>{{ $project->requested_at->format('d/m/Y') }}</td>
-                    <td>
-                        <a href="{{ route('project.show', $project) }}">{{ $project->theme }}</a>
-                    </td>
-                    <td>{{ $project->student->name ?? '' }}</td>
-                    @if (auth()->user()->admin)
-                        <td>{{ $project->user->name }}</td>
-                    @endif
-                    <td class="flex space-x-2">
-                        @if ($project->bibliometric_count > 0)
-                            <x-ts-link :href="route('project.bibliometrics.show', $project)" icon="book-open" />
-                        @else
-                            <x-ts-icon name="book-open" class="h-4" color="gray" />
-                        @endif
-                        {{-- <x-ts-link href="#" icon="microphone" /> --}}
-                    </td>
-                </tr>
-            @endforeach
-        </x-slot>
-    </x-table>
+        @endinteract
+    </x-ts-table>
     @livewire('project.project-form')
 </div>

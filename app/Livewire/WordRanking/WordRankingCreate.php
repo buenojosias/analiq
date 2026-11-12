@@ -46,8 +46,8 @@ class WordRankingCreate extends Component
         'também', 'além',
         'mais',
         'acerca',
-        'seu','sua','seus', 'suas',
-        'teve', 'qual'
+        'seu', 'sua', 'seus', 'suas',
+        'teve', 'qual',
     ];
 
     public $results = [];
@@ -78,8 +78,8 @@ class WordRankingCreate extends Component
     public function generate()
     {
         $internalsContent = Internal::query()
-            ->whereRelation('production', fn($q) => $q->whereIn('type', $this->production_types))
-            ->whereHas('production', function($query) {
+            ->whereRelation('production', fn ($q) => $q->whereIn('type', $this->production_types))
+            ->whereHas('production', function ($query) {
                 $query->whereIn('type', $this->production_types)
                     ->where('project_id', $this->project->id);
             })
@@ -98,7 +98,7 @@ class WordRankingCreate extends Component
 
         $wordCount = [];
         foreach ($words as $word) {
-            if (strlen($word) >= $this->minLenght && !in_array($word, $this->excludedWords)) {
+            if (strlen($word) >= $this->minLenght && ! in_array($word, $this->excludedWords)) {
                 $wordCount[$word]['id'] = rand(00000000, 99999000);
                 $wordCount[$word]['word'] = $word;
                 $wordCount[$word]['count'] = isset($wordCount[$word]['count']) ? $wordCount[$word]['count'] + 1 : 1;
@@ -126,7 +126,7 @@ class WordRankingCreate extends Component
                         'count' => $combinedCount,
                         'posts' => array_keys(array_filter($internalsContent, function ($content) use ($combinedWord) {
                             return stripos($content, $combinedWord) !== false;
-                        }))
+                        })),
                     ];
                 }
             }
@@ -142,7 +142,7 @@ class WordRankingCreate extends Component
 
     public function selectResult($id)
     {
-        return;
+
         // dump('hi');
         // $this->reset('selectedResult');
         // sleep(2);
@@ -197,7 +197,20 @@ class WordRankingCreate extends Component
 
     public function render()
     {
-        return view('livewire.word-ranking.word-ranking-create')
+        $headers = [
+            ['index' => 'word', 'label' => 'Palavra', 'sortable' => false],
+            ['index' => 'count', 'label' => 'Ocorrências', 'sortable' => false],
+            ['index' => 'internal_count', 'label' => 'Produções', 'sortable' => false],
+            ['index' => 'action', 'label' => '', 'sortable' => false],
+        ];
+        $resultRows = collect($this->results)
+            ->map(fn (array $result): array => [
+                ...$result,
+                'internal_count' => count($result['internals'] ?? []),
+            ])
+            ->values();
+
+        return view('livewire.word-ranking.word-ranking-create', compact('headers', 'resultRows'))
             ->title('Gerar ranking de palavras');
     }
 }

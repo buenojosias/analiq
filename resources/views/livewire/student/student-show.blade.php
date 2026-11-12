@@ -16,21 +16,13 @@
             </x-slot>
         </x-ts-card>
         <div>
-            <x-table label="Projetos">
-                <x-slot:body>
-                    @forelse ($student->projects as $project)
-                        <tr>
-                            <td>
-                                <a href="{{ route('project.show', $project) }}">{{ $project->theme }}</a>
-                            </td>
-                        </tr>
-                    @empty
-                        <div class="p-4 text-center text-sm">
-                            Nenhum projeto para este(a) estudante.
-                        </div>
-                    @endforelse
-                </x-slot:body>
-            </x-table>
+            <x-ts-table :headers="$projectHeaders" :rows="$student->projects">
+                <x-slot:header>Projetos</x-slot:header>
+                @interact('column_theme', $row)
+                    <a href="{{ route('project.show', $row) }}">{{ $row->theme }}</a>
+                @endinteract
+                <x-slot:empty>Nenhum projeto para este(a) estudante.</x-slot:empty>
+            </x-ts-table>
         </div>
     </div>
 </section>

@@ -29,6 +29,7 @@ class RecordPerProgram extends Component
 
         $this->productions = $productions->map(function ($production) {
             $production->program = $production->program ?? 'Não informado';
+
             return $production;
         });
     }
@@ -90,14 +91,33 @@ class RecordPerProgram extends Component
             $typeTotals['total'] += $typeTotal;
         }
 
+        $programRows = $productionsByProgram->map(fn ($productions, $program): array => [
+            'name' => $program === '' ? 'Não informado' : $program,
+            'key' => $program,
+            'productions_count' => $productions->count(),
+        ])->values();
+        $programProductionRows = collect($this->programProductions)->flatMap(fn ($productions) => $productions)->values();
+        $groupHeaders = [
+            ['index' => 'name', 'label' => 'Programa', 'sortable' => false],
+            ['index' => 'productions_count', 'label' => 'Produções', 'sortable' => false],
+        ];
+        $productionHeaders = [
+            ['index' => 'institution', 'label' => 'Instituição', 'sortable' => false],
+            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
+            ['index' => 'year', 'label' => 'Ano', 'sortable' => false],
+            ['index' => 'action', 'label' => '', 'sortable' => false],
+        ];
+        $yearMatrix = TableMatrix::build('Programas', $years, $tableByYear, columnTotals: $yearTotals);
+        $typeMatrix = TableMatrix::build('Programas', $types, $tableByType, columnTotals: $typeTotals);
+
         return view('livewire.record.record-per-program', compact(
-            'productionsByProgram',
-            'years',
-            'tableByYear',
-            'yearTotals',
-            'types',
-            'tableByType',
-            'typeTotals',
+            'programRows',
+            'programProductionRows',
+            'groupHeaders',
+            'productionHeaders',
+            'yearMatrix',
+            'typeMatrix',
         ))
             ->title('Relatório por programa');
     }
@@ -112,6 +132,7 @@ class RecordPerProgram extends Component
 
         $programProductions = $programProductions->map(function ($production) {
             $production->institution = $production->institution ?? 'Instituição não informada';
+
             return $production;
         });
 
@@ -128,6 +149,7 @@ class RecordPerProgram extends Component
 
         $programProductions = $programProductions->map(function ($production) {
             $production->institution = $production->institution ?? 'Instituição não informada';
+
             return $production;
         });
 

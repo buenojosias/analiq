@@ -27,28 +27,14 @@
         </div>
 
         <div class="col-span-3">
-            <x-table label="Relatório">
-                <x-slot name="header">
-                    <th>Palavra</th>
-                    <th>Ocorrências</th>
-                    <th>Produções</th>
-                    <th width="1"></th>
-                </x-slot>
-                <x-slot name="body">
-                    @foreach ($wordranking->records as $record)
-                        <tr>
-                            <td>{{ $record['word'] }}</td>
-                            <td>{{ $record['count'] }}</td>
-                            <td>{{ $record['internal_count'] }}</td>
-                            <td>
-                                <x-ts-dropdown text="Ações" position="bottom-end">
-                                    <x-ts-dropdown.items text="Ver contexto" />
-                                </x-ts-dropdown>
-                            </td>
-                        </tr>
-                    @endforeach
-                </x-slot>
-            </x-table>
+            <x-ts-table :$headers :rows="$wordranking->records">
+                <x-slot:header>Relatório</x-slot:header>
+                @interact('column_action', $row)
+                    <x-ts-dropdown text="Ações" position="bottom-end">
+                        <x-ts-dropdown.items text="Ver contexto" />
+                    </x-ts-dropdown>
+                @endinteract
+            </x-ts-table>
         </div>
     </div>
 </section>

@@ -1,16 +1,4 @@
-<section x-data="{
-    author: false,
-    year: true,
-    type: true,
-    repository: false,
-    descriptors: false,
-    periodical: false,
-    institution: false,
-    program: false,
-    city: false,
-    state: false,
-    url: false,
-}">
+<section>
     <x-ts-toast />
     <x-page-header title="Produções encontradas" :subtitle="$project->theme">
         <div class="flex flex-col gap-1">
@@ -18,89 +6,56 @@
             <x-ts-button text="Grupos" icon="rectangle-group" :href="route('project.bibliometrics.productions.groups.index', $project)" flat />
         </div>
     </x-page-header>
-    <x-table screen>
-        <div class="table-header flex justify-between items-center">
-            <div class="w-1/2">
-                <x-ts-input wire:model.live.debounce="q" placehoder="Buscar título ou subtítulo"
-                    icon="magnifying-glass" />
-            </div>
-            <div>
-                <span class="mr-2 text-sm font-normal">{{ $productions->count() }} resultados</span>
-                <x-ts-button icon="funnel" flat x-on:click="$tsui.open.slide('filters')" />
-                <x-ts-button icon="eye" flat x-on:click="$tsui.open.slide('columns')" />
-            </div>
-        </div>
-        <x-slot name="header">
-            <th width="10">
-                @livewire('components.bulk-dropdown', ['project' => $project])
-            </th>
-            <th @click="sortByColumn">Título</th>
-            <th x-show="author">Autor(es)</th>
-            <th x-show="year">Ano</th>
-            <th x-show="type">Tipo</th>
-            <th x-show="repository">Repositório</th>
-            <th x-show="descriptors">Descritores</th>
-            <th x-show="periodical">Periódico</th>
-            <th x-show="institution">Instituição</th>
-            <th x-show="program">Programa</th>
-            <th x-show="city">Cidade</th>
-            <th x-show="state">UF</th>
-            <th x-show="url">URL</th>
-            <th width="10"></th>
-        </x-slot>
-        <x-slot name="body">
-            @foreach ($productions as $production)
-                <tr @class(['line-through text-gray-600' => $production->trashed()])>
-                    <td>
-                        @livewire('components.bulk-checkbox', ['production_id' => $production->id], key($production->id))
-                    </td>
-                    <td class="!text-wrap flex gap-1">
-                        @if ($production->highlighted)
-                            <x-ts-icon name="star" class="w-4 h-4 text-amber-600" />
-                        @endif
-                        <a href="{{ route('project.bibliometrics.productions.show', [$project, $production]) }}"
-                            wire:navigate>
-                            {{ $production->subtitle ? $production->title . ': ' . $production->subtitle : $production->title }}
-                        </a>
-                    </td>
-                    <td x-show="author">
-                        <ul>
-                            @foreach ($production->authors as $author)
-                                <li>
-                                    {{ $author->lastname }}, {{ $author->forename }}
-                                </li>
-                            @endforeach
-                        </ul>
-                    </td>
-                    <td x-show="year">{{ $production->year }}</td>
-                    <td x-show="type">{{ $production->type }}</td>
-                    <td x-show="repository">{{ $production->repository }}</td>
-                    <td x-show="descriptors">
-                        @foreach ($production->searched_terms as $term)
-                            {{ $term }}
-                            @if (!$loop->last)
-                                AND
-                            @endif
-                        @endforeach
-                    </td>
-                    <td x-show="periodical">{{ $production->periodical }}</td>
-                    <td x-show="institution">{{ $production->institution }}</td>
-                    <td x-show="program">{{ $production->program }}</td>
-                    <td x-show="city">{{ $production->city }}</td>
-                    <td x-show="state">{{ $production->state->abbreviation ?? '' }}</td>
-                    <td x-show="url">
-                        @if ($production->url)
-                            <a href="{{ $production->url }}" target="_black">{{ $production->url }}</a>
-                        @endif
-                    </td>
-                    <td>
-                        <x-ts-button icon="eye"
-                            x-on:click="$dispatch('preview-production', { id: {{ $production->id }} })" sm flat />
-                    </td>
-                </tr>
-            @endforeach
-        </x-slot>
-    </x-table>
+    <div class="screen">
+        <x-ts-table :$headers :rows="$productions">
+            <x-slot:header>
+                <div class="table-header flex justify-between items-center">
+                    <div class="w-1/2">
+                        <x-ts-input wire:model.live.debounce="q" placeholder="Buscar título ou subtítulo" icon="magnifying-glass" />
+                    </div>
+                    <div>
+                        @livewire('components.bulk-dropdown', ['project' => $project])
+                        <span class="mr-2 text-sm font-normal">{{ $productions->count() }} resultados</span>
+                        <x-ts-button icon="funnel" flat x-on:click="$tsui.open.slide('filters')" />
+                        <x-ts-button icon="eye" flat x-on:click="$tsui.open.slide('columns')" />
+                    </div>
+                </div>
+            </x-slot:header>
+            @interact('column_select', $row)
+                @livewire('components.bulk-checkbox', ['production_id' => $row->id], key($row->id))
+            @endinteract
+            @interact('column_full_title', $row)
+                <div @class(['line-through text-gray-600' => $row->trashed()])>
+                    @if ($row->highlighted)
+                        <x-ts-icon name="star" class="w-4 h-4 text-amber-600" />
+                    @endif
+                    <a href="{{ route('project.bibliometrics.productions.show', [$project, $row]) }}" wire:navigate>
+                        {{ $row->full_title }}
+                    </a>
+                </div>
+            @endinteract
+            @interact('column_author', $row)
+                {{ $row->authors->map(fn ($author) => $author->lastname.', '.$author->forename)->join('; ') }}
+            @endinteract
+            @interact('column_type', $row)
+                {{ $row->type->value }}
+            @endinteract
+            @interact('column_descriptors', $row)
+                {{ collect($row->searched_terms)->join(' AND ') }}
+            @endinteract
+            @interact('column_state', $row)
+                {{ $row->state?->abbreviation }}
+            @endinteract
+            @interact('column_url', $row)
+                @if ($row->url)
+                    <a href="{{ $row->url }}" target="_blank" rel="noopener noreferrer">{{ $row->url }}</a>
+                @endif
+            @endinteract
+            @interact('column_action', $row)
+                <x-ts-button icon="eye" x-on:click="$dispatch('preview-production', { id: {{ $row->id }} })" sm flat />
+            @endinteract
+        </x-ts-table>
+    </div>
     <x-ts-slide left title="Filtros" id="filters" size="sm">
         <div class="space-y-3">
             <div class="flex flex-wrap gap-4">
@@ -131,76 +86,22 @@
 
     <x-ts-slide left title="Colunas visíveis" id="columns" size="sm">
         <div class="space-y-3">
-            <x-ts-toggle x-model="author" label="Autor" />
-            <x-ts-toggle x-model="year" label="Ano" />
-            <x-ts-toggle x-model="type" label="Tipo" />
-            <x-ts-toggle x-model="repository" label="Repositório" />
-            <x-ts-toggle x-model="descriptors" label="Descritores" />
+            <x-ts-toggle wire:model.live="visibleColumns.author" label="Autor" />
+            <x-ts-toggle wire:model.live="visibleColumns.year" label="Ano" />
+            <x-ts-toggle wire:model.live="visibleColumns.type" label="Tipo" />
+            <x-ts-toggle wire:model.live="visibleColumns.repository" label="Repositório" />
+            <x-ts-toggle wire:model.live="visibleColumns.descriptors" label="Descritores" />
             @if ($has_periodicals)
-                <x-ts-toggle x-model="periodical" label="Periódico" />
+                <x-ts-toggle wire:model.live="visibleColumns.periodical" label="Periódico" />
             @endif
             @if ($has_monographies)
-                <x-ts-toggle x-model="institution" label="Instituição" />
-                <x-ts-toggle x-model="program" label="Programa" />
-                <x-ts-toggle x-model="city" label="Cidade" />
+                <x-ts-toggle wire:model.live="visibleColumns.institution" label="Instituição" />
+                <x-ts-toggle wire:model.live="visibleColumns.program" label="Programa" />
+                <x-ts-toggle wire:model.live="visibleColumns.city" label="Cidade" />
             @endif
-            <x-ts-toggle x-model="state" label="Estado" />
-            <x-ts-toggle x-model="url" label="URL" />
+            <x-ts-toggle wire:model.live="visibleColumns.state" label="Estado" />
+            <x-ts-toggle wire:model.live="visibleColumns.url" label="URL" />
         </div>
     </x-ts-slide>
     @livewire('production.production-slide', ['project' => $project])
 </section>
-@push('scripts')
-    <script>
-        function data() {
-            return {
-                sortBy: "",
-                sortAsc: false,
-                sortByColumn($event) {
-                    if (this.sortBy === $event.target.innerText) {
-                        if (this.sortAsc) {
-                            this.sortBy = "";
-                            this.sortAsc = false;
-                        } else {
-                            this.sortAsc = !this.sortAsc;
-                        }
-                    } else {
-                        this.sortBy = $event.target.innerText;
-                    }
-
-                    let rows = this.getTableRows()
-                        .sort(
-                            this.sortCallback(
-                                Array.from($event.target.parentNode.children).indexOf(
-                                    $event.target
-                                )
-                            )
-                        )
-                        .forEach((tr) => {
-                            this.$refs.tbody.appendChild(tr);
-                        });
-                },
-                getTableRows() {
-                    return Array.from(this.$refs.tbody.querySelectorAll("tr"));
-                },
-                getCellValue(row, index) {
-                    return row.children[index].innerText;
-                },
-                sortCallback(index) {
-                    return (a, b) =>
-                        ((row1, row2) => {
-                            return row1 !== "" &&
-                                row2 !== "" &&
-                                !isNaN(row1) &&
-                                !isNaN(row2) ?
-                                row1 - row2 :
-                                row1.toString().localeCompare(row2);
-                        })(
-                            this.getCellValue(this.sortAsc ? a : b, index),
-                            this.getCellValue(this.sortAsc ? b : a, index)
-                        );
-                }
-            };
-        }
-    </script>
-@endpush

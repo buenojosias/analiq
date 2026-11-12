@@ -1,42 +1,22 @@
 <div class="flex-1">
     <x-ts-toast />
-    <x-table>
-        <div class="table-header flex justify-between items-center">
-            <div class="w-1/2">
-                <x-ts-input wire:model.live.debounce="q" placehoder="Buscar citação" icon="magnifying-glass" />
-            </div>
-            <div>
-                <x-ts-button text="Adicionar citação" x-on:click="$tsui.open.modal('citation-modal')" />
-            </div>
-        </div>
+    <x-ts-table :$headers :rows="$citations" paginate>
         <x-slot:header>
-            <th>Citação</th>
-            <th>Tipo</th>
-            <th>Referência</th>
-            <th></th>
+            <div class="table-header flex justify-between items-center">
+                <div class="w-1/2">
+                    <x-ts-input wire:model.live.debounce="q" placehoder="Buscar citação" icon="magnifying-glass" />
+                </div>
+                <div>
+                    <x-ts-button text="Adicionar citação" x-on:click="$tsui.open.modal('citation-modal')" />
+                </div>
+            </div>
         </x-slot>
-        <x-slot:body>
-            @foreach ($citations as $citation)
-                <tr>
-                    <td class="!text-wrap">
-                        {{ $citation->content }}
-                    </td>
-                    <td>{{ $citation->type }}</td>
-                    <td>
-                        <a href="{{ route('project.bibliometrics.citations.index', [$project, 'ref' => $citation->reference->id]) }}"
-                            wire:navigate>
-                            {{ $citation->reference->short_author }},
-                            {{ $citation->reference->year }}
-                        </a>
-                    </td>
-                    <td></td>
-                </tr>
-            @endforeach
-        </x-slot>
-        <x-slot:pagination>
-            {{ $citations->links() }}
-        </x-slot>
-    </x-table>
+        @interact('column_reference', $row)
+            <a href="{{ route('project.bibliometrics.citations.index', [$project, 'ref' => $row->reference->id]) }}" wire:navigate>
+                {{ $row->reference->short_author }}, {{ $row->reference->year }}
+            </a>
+        @endinteract
+    </x-ts-table>
 
     <x-ts-modal title="Adicionar citação" x-on:open="$wire.loadReferences" id="citation-modal" persistent>
         <form wire:submit="submit" id="citation-form" class="space-y-4">

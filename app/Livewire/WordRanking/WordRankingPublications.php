@@ -43,13 +43,20 @@ class WordRankingPublications extends Component
             ->get()->toArray();
 
         $this->publications = Publication::query()
-            ->whereHas('internals', fn($query) => $query->whereIn('id', $this->internalIds))
+            ->whereHas('internals', fn ($query) => $query->whereIn('id', $this->internalIds))
             ->get();
         dump($this->internals);
     }
 
     public function render()
     {
-        return view('livewire.word-ranking.word-ranking-publications');
+        $headers = [
+            ['index' => 'title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'section', 'label' => 'Seção', 'sortable' => false],
+            ['index' => 'count', 'label' => 'Contagem', 'sortable' => false],
+            ['index' => 'action', 'label' => '', 'sortable' => false],
+        ];
+
+        return view('livewire.word-ranking.word-ranking-publications', compact('headers'));
     }
 }

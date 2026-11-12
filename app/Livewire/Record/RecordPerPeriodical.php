@@ -9,8 +9,11 @@ use Livewire\Component;
 class RecordPerPeriodical extends Component
 {
     public $project;
+
     public $productions = [];
+
     public $selectedPeriodical = '';
+
     public $periodicalProductions = [];
 
     public function mount(Project $project)
@@ -18,7 +21,7 @@ class RecordPerPeriodical extends Component
         $this->project = $project;
 
         $this->productions = Production::query()
-            ->select('id', 'project_id', 'repository', 'periodical', 'year')
+            ->select('id', 'project_id', 'title', 'subtitle', 'type', 'repository', 'periodical', 'year')
             ->where('project_id', $this->project->id)
             ->where('type', 'Periódico')
             ->get();
@@ -37,12 +40,12 @@ class RecordPerPeriodical extends Component
         $yearTotals = [];
         $repositoryTotals = [];
 
-        foreach($years as $year) {
+        foreach ($years as $year) {
             $yearTotals[$year] = 0;
         }
         $yearTotals['total'] = 0;
 
-        foreach($repositories as $repository) {
+        foreach ($repositories as $repository) {
             $repositoryTotals[$repository] = 0;
         }
         $repositoryTotals['total'] = 0;
@@ -74,17 +77,35 @@ class RecordPerPeriodical extends Component
             $tableByYear[$periodical]['total'] = $yearTotal;
             $tableByRepository[$periodical]['total'] = $repositoryTotal;
 
+            $yearTotals['total'] += $yearTotal;
             $repositoryTotals['total'] += $repositoryTotal;
         }
 
-        return view(
-            'livewire.record.record-per-periodical',
-            compact(
-                    'productionsByPeriodical',
-                    'years', 'tableByYear', 'yearTotals',
-                    'repositories', 'tableByRepository', 'repositoryTotals',
-                )
-        )
+        $periodicalRows = $productionsByPeriodical->map(fn ($productions, $periodical): array => [
+            'name' => $periodical === '' ? 'Não informado' : $periodical,
+            'key' => $periodical,
+            'productions_count' => $productions->count(),
+        ])->values();
+        $groupHeaders = [
+            ['index' => 'name', 'label' => 'Periódico', 'sortable' => false],
+            ['index' => 'productions_count', 'label' => 'Produções', 'sortable' => false],
+        ];
+        $productionHeaders = [
+            ['index' => 'full_title', 'label' => 'Título', 'sortable' => false],
+            ['index' => 'type', 'label' => 'Tipo', 'sortable' => false],
+            ['index' => 'year', 'label' => 'Ano', 'sortable' => false],
+            ['index' => 'action', 'label' => '', 'sortable' => false],
+        ];
+        $yearMatrix = TableMatrix::build('Periódicos', $years, $tableByYear, columnTotals: $yearTotals);
+        $repositoryMatrix = TableMatrix::build('Periódicos', $repositories, $tableByRepository, columnTotals: $repositoryTotals);
+
+        return view('livewire.record.record-per-periodical', compact(
+            'periodicalRows',
+            'groupHeaders',
+            'productionHeaders',
+            'yearMatrix',
+            'repositoryMatrix',
+        ))
             ->title('Relatório por periódico');
     }
 
@@ -103,5 +124,4 @@ class RecordPerPeriodical extends Component
             ->whereNull('periodical')
             ->get();
     }
-
 }
