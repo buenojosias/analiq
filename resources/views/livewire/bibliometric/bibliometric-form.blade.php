@@ -25,7 +25,7 @@
                             <x-ts-tag wire:model="languages" label="Idiomas *" hint="Separe os itens com vírgula" />
                         </div>
                         <div class="col-span-2">
-                            <x-ts-number wire:model.blur="start_year" label="Ano inicial *" min="1900" />
+                            <x-ts-number wire:model.live.blur="start_year" label="Ano inicial *" min="1900" />
                         </div>
                         <div class="col-span-2">
                             <x-ts-number wire:model="end_year" label="Ano final *" />

@@ -33,7 +33,7 @@
                 </div>
                 <div class="col-span-3">
                     <x-ts-input label="Autor(es) *" wire:model="authors_display"
-                        x-on:click="$modalOpen('authors-modal')" readonly />
+                        x-on:click="$tsui.open.modal('authors-modal')" readonly />
                 </div>
                 <div>
                     <x-ts-select.styled label="Idioma *" wire:model="language" :options="$bibliometric->languages" />
@@ -107,7 +107,7 @@
             </div>
 
             <x-slot:footer>
-                {{-- <x-ts-button type="button" x-on:click="$modalOpen('modal-abstract')" text="Adicionar resumo" outline /> --}}
+                {{-- <x-ts-button type="button" x-on:click="$tsui.open.modal('modal-abstract')" text="Adicionar resumo" outline /> --}}
                 <x-ts-button type="submit" text="Salvar" />
             </x-slot:footer>
         </x-ts-card>

@@ -6,24 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Layout Analiq</title>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        lightBg: '#f9fafb',
-                        darkBg: '#1f2937',
-                        lightSidebar: '#e5e7eb',
-                        darkSidebar: '#374151',
-                        lightBorder: '#d1d5db',
-                        darkBorder: '#4b5563',
-                    }
-                }
-            }
-        }
-    </script>
+    @vite('resources/css/app.css')
 </head>
 
 <body class="h-screen flex flex-col overflow-hidden bg-lightBg dark:bg-darkBg text-gray-800 dark:text-gray-100"

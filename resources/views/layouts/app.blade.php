@@ -11,9 +11,7 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <tallstackui:script />
     @livewireStyles
-    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
-    <link rel="stylesheet" href="{{ asset('build/assets/app-DZoXTVmk.css') }}">
-    <script src="{{ asset('build/assets/app-D2jpX1vH.js') }}" defer></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/jasondavies/d3-cloud/build/d3.layout.cloud.js"></script>
 </head>

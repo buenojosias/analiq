@@ -1,8 +1,8 @@
 <div class="flex-1 space-y-3">
     <x-table>
         <div class="table-header flex justify-end gap-2">
-            <x-ts-button text="Adicionar referência" x-on:click="$modalOpen('reference-modal')" />
-            <x-ts-button text="Vincular existente" x-on:click="$modalOpen('sync-modal')" flat />
+            <x-ts-button text="Adicionar referência" x-on:click="$tsui.open.modal('reference-modal')" />
+            <x-ts-button text="Vincular existente" x-on:click="$tsui.open.modal('sync-modal')" flat />
         </div>
         <x-slot:header>
             <th>Autor(es)</th>
@@ -62,7 +62,7 @@
             </div>
         </form>
         <x-slot:footer>
-            <x-ts-button x-on:click="$modalClose('reference-modal'), $wire.resetFields()" text="Cancelar" flat />
+            <x-ts-button x-on:click="$tsui.close.modal('reference-modal'), $wire.resetFields()" text="Cancelar" flat />
             <x-ts-button type="submit" wire:click="submitReference" text="Salvar" />
         </x-slot:footer>
     </x-ts-modal>
@@ -89,7 +89,7 @@
             </div>
         @endif
         <x-slot:footer>
-            <x-ts-button x-on:click="$modalClose('sync-modal'), $wire.resetFields()" text="Cancelar" flat />
+            <x-ts-button x-on:click="$tsui.close.modal('sync-modal'), $wire.resetFields()" text="Cancelar" flat />
             <x-ts-button type="button" wire:click="submitSync" text="Salvar" />
         </x-slot:footer>
     </x-ts-modal>

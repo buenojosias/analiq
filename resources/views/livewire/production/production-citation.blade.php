@@ -6,7 +6,7 @@
                 <x-ts-input wire:model.live.debounce="q" placehoder="Buscar citação" icon="magnifying-glass" />
             </div>
             <div>
-                <x-ts-button text="Adicionar citação" x-on:click="$modalOpen('citation-modal')" />
+                <x-ts-button text="Adicionar citação" x-on:click="$tsui.open.modal('citation-modal')" />
             </div>
         </div>
         <x-slot:header>
@@ -60,7 +60,7 @@
             </div>
         </form>
         <x-slot:footer>
-            <x-ts-button text="Fechar" x-on:click="$modalClose('citation-modal')" flat />
+            <x-ts-button text="Fechar" x-on:click="$tsui.close.modal('citation-modal')" flat />
             <x-ts-button type="submit" text="Salvar" form="citation-form" />
         </x-slot>
     </x-ts-modal>

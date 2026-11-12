@@ -29,7 +29,7 @@
                 </div>
                 <div class="col-span-3">
                     <x-ts-input label="Autor(es) *" wire:model="authors_display"
-                        x-on:click="$modalOpen('authors-modal')" readonly />
+                        x-on:click="$tsui.open.modal('authors-modal')" readonly />
                 </div>
                 <div class="col-span-2">
                     <x-ts-select.styled label="Tipo *" wire:model="type" :options="$bibliometric->types" />

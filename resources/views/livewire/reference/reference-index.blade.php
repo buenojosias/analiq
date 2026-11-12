@@ -10,7 +10,7 @@
                 <x-ts-input wire:model.live.debounce="q" placehoder="Buscar" icon="magnifying-glass" />
             </div>
             <div>
-                <x-ts-button icon="funnel" flat x-on:click="$slideOpen('filters')" />
+                <x-ts-button icon="funnel" flat x-on:click="$tsui.open.slide('filters')" />
             </div>
         </div>
         <x-slot:header>

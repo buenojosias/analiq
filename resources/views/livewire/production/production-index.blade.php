@@ -26,8 +26,8 @@
             </div>
             <div>
                 <span class="mr-2 text-sm font-normal">{{ $productions->count() }} resultados</span>
-                <x-ts-button icon="funnel" flat x-on:click="$slideOpen('filters')" />
-                <x-ts-button icon="eye" flat x-on:click="$slideOpen('columns')" />
+                <x-ts-button icon="funnel" flat x-on:click="$tsui.open.slide('filters')" />
+                <x-ts-button icon="eye" flat x-on:click="$tsui.open.slide('columns')" />
             </div>
         </div>
         <x-slot name="header">
