@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @import '../../vendor/tallstackui/tallstackui/css/v4.css';
 
+@plugin '@tailwindcss/forms';
+
 @theme {
     --font-sans: Figtree, ui-sans-serif, system-ui, sans-serif;
     --color-lightBg: #f9fafb;
