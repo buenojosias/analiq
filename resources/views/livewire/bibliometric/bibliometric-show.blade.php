@@ -25,9 +25,9 @@
             <x-ts-card header="Produções encontradas" paddingless>
                 <x-ts-table :$headers :rows="$types">
                 </x-ts-table>
-                <x-slot:footer>
+                <x-slot:footer between>
                     <x-ts-link :href="route('project.bibliometrics.productions.index', $project)" wire:navigate>Ver todas</x-ts-link>
-                    <x-ts-link :href="route('project.bibliometrics.productions.create', $project)" wire:navigate text="Nova produção" />
+                    <x-ts-link :href="route('project.bibliometrics.productions.create', $project)" wire:navigate text="Adicionar produção" />
                 </x-slot:footer>
             </x-ts-card>
 
