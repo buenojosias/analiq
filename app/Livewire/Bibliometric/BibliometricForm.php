@@ -59,7 +59,6 @@ class BibliometricForm extends Component
 
         if ($this->bibliometric = $project->bibliometric) {
             $this->id = $this->bibliometric->id;
-            $this->student_id = $this->bibliometric->student_id;
             $this->repositories = $this->bibliometric->repositories;
             $this->types = $this->bibliometric->types;
             $this->terms = $this->bibliometric->terms;

@@ -14,9 +14,6 @@
         @interact('column_theme', $row)
             <a href="{{ route('researches.show', $row) }}">{{ $row->theme }}</a>
         @endinteract
-        @interact('column_student', $row)
-            {{ $row->student?->name }}
-        @endinteract
         @interact('column_action', $row)
             <x-ts-link :href="route('researches.publications', $row)" wire:navigate :text="$row->publications_count . ' publicações'" />
         @endinteract

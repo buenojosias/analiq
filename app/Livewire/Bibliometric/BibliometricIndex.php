@@ -11,12 +11,10 @@ class BibliometricIndex extends Component
         $headers = [
             ['index' => 'requested_at', 'label' => 'Data', 'sortable' => false],
             ['index' => 'theme', 'label' => 'Tema', 'sortable' => false],
-            ['index' => 'student', 'label' => 'Estudante', 'sortable' => false],
             ['index' => 'action', 'label' => '', 'sortable' => false],
         ];
 
         $researches = Research::query()
-            ->with('student')
             ->withCount('publications')
             ->get();
 

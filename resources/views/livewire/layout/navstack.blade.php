@@ -17,7 +17,6 @@ new class extends Component {
 
 <nav class="flex items-baseline space-x-4 w-full sm:w-auto">
     <x-nav-link label="Dashboard" :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate />
-    <x-nav-link label="Estudantes" :href="route('students')" :active="request()->routeIs('students*')" wire:navigate />
     <x-nav-link label="Pesquisas" :href="route('researches')" :active="request()->routeIs('researches*')" wire:navigate />
 
     <!-- Settings Dropdown -->

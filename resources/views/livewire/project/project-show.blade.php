@@ -11,9 +11,6 @@
                 <div class="detail">
                     <x-detail label="Tema da pesquisa" :value="$project->theme" />
                     <x-detail label="Data da solicitação" :value="$project->requested_at->format('d/m/Y')" />
-                    @if ($project->student)
-                        <x-detail label="Estudante" :value="$project->student->name" />
-                    @endif
                     @if (auth()->user()->admin)
                         <x-detail label="Usuário" :value="$project->user->name" />
                     @endif

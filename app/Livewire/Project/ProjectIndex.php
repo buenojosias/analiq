@@ -12,7 +12,6 @@ class ProjectIndex extends Component
     public function mount()
     {
         $this->projects = Project::query()
-            ->with('student')
             ->when(auth()->user()->admin, fn ($q) => $q->with('user'))
             ->withCount('bibliometric')
             ->get();
@@ -23,7 +22,6 @@ class ProjectIndex extends Component
         $headers = [
             ['index' => 'theme', 'label' => 'Tema', 'sortable' => false],
             ['index' => 'requested_at', 'label' => 'Data', 'sortable' => false],
-            ['index' => 'student', 'label' => 'Estudante', 'sortable' => false],
         ];
 
         if (auth()->user()->admin) {

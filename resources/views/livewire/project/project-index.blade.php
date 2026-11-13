@@ -9,9 +9,6 @@
         @interact('column_requested_at', $row)
             {{ $row->requested_at->format('d/m/Y') }}
         @endinteract
-        @interact('column_student', $row)
-            {{ $row->student?->name }}
-        @endinteract
         @interact('column_user', $row)
             {{ $row->user?->name }}
         @endinteract

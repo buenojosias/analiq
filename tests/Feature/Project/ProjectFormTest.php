@@ -13,14 +13,12 @@ class ProjectFormTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_owner_can_create_project_with_their_student(): void
+    public function test_owner_can_create_project(): void
     {
         $user = User::factory()->create();
-        $student = $user->students()->create(['name' => 'Estudante']);
 
         Livewire::actingAs($user)
             ->test(ProjectForm::class)
-            ->set('student_id', $student->id)
             ->set('theme', 'Tema do projeto')
             ->set('requested_at', now()->toDateString())
             ->call('save')
@@ -29,25 +27,8 @@ class ProjectFormTest extends TestCase
         $project = Project::query()->firstOrFail();
 
         $this->assertSame($user->id, $project->user_id);
-        $this->assertSame($student->id, $project->student_id);
         $this->assertSame('Tema do projeto', $project->theme);
         $this->assertSame($project->id, $user->refresh()->selected_project_id);
-    }
-
-    public function test_project_rejects_another_users_student(): void
-    {
-        $user = User::factory()->create();
-        $otherStudent = User::factory()->create()->students()->create(['name' => 'Outro estudante']);
-
-        Livewire::actingAs($user)
-            ->test(ProjectForm::class)
-            ->set('student_id', $otherStudent->id)
-            ->set('theme', 'Tema do projeto')
-            ->set('requested_at', now()->toDateString())
-            ->call('save')
-            ->assertHasErrors(['student_id']);
-
-        $this->assertSame(0, Project::query()->count());
     }
 
     public function test_owner_can_update_project_without_changing_its_owner(): void

@@ -67,7 +67,6 @@
                 <x-nav-link label="Bibliometria" :href="route('project.bibliometrics.show', request()->route()->project)" />
             @else
                 <x-nav-link label="Dashboard" href="{{ route('dashboard') }}" />
-                <x-nav-link label="Estudantes" href="{{ route('students.index') }}" />
                 <x-nav-link label="Projetos" href="{{ route('projects.index') }}" />
             @endif
         </nav>

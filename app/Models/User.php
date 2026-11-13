@@ -38,13 +38,8 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'admin' => 'boolean',
-            'active' => 'boolean'
+            'active' => 'boolean',
         ];
-    }
-
-    public function students(): HasMany
-    {
-        return $this->hasMany(Student::class);
     }
 
     public function projects(): HasMany

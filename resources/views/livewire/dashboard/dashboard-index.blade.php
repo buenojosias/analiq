@@ -36,13 +36,6 @@
                 @endinteract
             </x-ts-table>
         </div>
-        <div class="w-ful sm:w-1/2 space-y-4">
-            <x-ts-table :headers="$studentHeaders" :rows="$students">
-                <x-slot:header>Estudantes</x-slot:header>
-            </x-ts-table>
-
-
-        </div>
     </div>
 
 </div>
