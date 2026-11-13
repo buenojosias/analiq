@@ -11,11 +11,13 @@ class CustomFields extends Component
     use Interactions;
 
     public $bibliometric;
+
     public $fields = [];
 
     public $custom_field_id;
 
     public $custom_field_name;
+
     public $custom_field_type;
 
     public $input_option;
@@ -27,7 +29,7 @@ class CustomFields extends Component
         ['label' => 'Decimal', 'value' => 'decimal'],
         ['label' => 'Data', 'value' => 'date'],
         ['label' => 'Verdadeiro/falso', 'value' => 'boolean'],
-        [ 'label' => 'Múltipla escolha', 'value' => 'select' ]
+        ['label' => 'Múltipla escolha', 'value' => 'select'],
     ];
 
     public function mount($bibliometric)
@@ -37,7 +39,8 @@ class CustomFields extends Component
 
     public function render()
     {
-        $this->fields = $this->bibliometric->customFields;
+        $this->fields = $this->bibliometric->customFields()->get();
+
         return view('livewire.bibliometric.custom-fields');
     }
 
@@ -49,25 +52,32 @@ class CustomFields extends Component
         ];
     }
 
-    public function editCustomField($field)
+    public function editCustomField(int $fieldId): void
     {
-        $this->custom_field_id = $field['id'];
-        $this->custom_field_name = $field['name'];
-        $this->custom_field_type = $field['type'];
+        $field = $this->bibliometric->customFields()->findOrFail($fieldId);
+
+        $this->custom_field_id = $field->id;
+        $this->custom_field_name = $field->name;
+        $this->custom_field_type = $field->type;
+    }
+
+    public function resetCustomFieldForm(): void
+    {
+        $this->reset('custom_field_name', 'custom_field_type', 'custom_field_id');
     }
 
     public function submit()
     {
         $this->validate([
-            'custom_field_name' => 'required|string|max:50|unique:custom_fields,name,' . ($this->custom_field_id ?? 'NULL') . ',id,bibliometric_id,' . ($this->bibliometric->id ?? 'NULL'),
-            'custom_field_type' => 'required|string|in:text,integer,decimal,date,boolean,select'
+            'custom_field_name' => 'required|string|max:50|unique:custom_fields,name,'.($this->custom_field_id ?? 'NULL').',id,bibliometric_id,'.($this->bibliometric->id ?? 'NULL'),
+            'custom_field_type' => 'required|string|in:text,integer,decimal,date,boolean,select',
         ]);
 
         if ($this->custom_field_id) {
             $field = $this->bibliometric->customFields()->findOrFail($this->custom_field_id);
             if ($field->type !== 'select' && $this->custom_field_type === 'select') {
                 $options = [];
-            } else if ($field->type === 'select' && $this->custom_field_type === 'select') {
+            } elseif ($field->type === 'select' && $this->custom_field_type === 'select') {
                 $options = $field->options;
             } else {
                 $options = null;
@@ -76,19 +86,19 @@ class CustomFields extends Component
             $field->update([
                 'name' => $this->custom_field_name,
                 'type' => $this->custom_field_type,
-                'options' => $options
+                'options' => $options,
             ]);
             $this->toast()->success('Campo personalizado atualizado com sucesso!')->send();
         } else {
             $this->bibliometric->customFields()->create([
                 'name' => $this->custom_field_name,
                 'type' => $this->custom_field_type,
-                'options' => $this->custom_field_type === 'select' ? [] : null
+                'options' => $this->custom_field_type === 'select' ? [] : null,
             ]);
             $this->toast()->success('Campo personalizado adicionado com sucesso!')->send();
         }
 
-        $this->reset('custom_field_name', 'custom_field_type', 'custom_field_id');
+        $this->resetCustomFieldForm();
     }
 
     public function removeCustomField($id)
@@ -110,7 +120,7 @@ class CustomFields extends Component
     {
         $this->render();
         $this->validate([
-            'input_option' => 'required|string|max:50'
+            'input_option' => 'required|string|max:50',
         ]);
         $options = $field['options'];
         $options[] = $this->input_option;

@@ -1,9 +1,9 @@
 <div>
     <x-ts-toast />
     <x-ts-dialog />
-    <x-ts-card header="Campos adicionais" x-data="{ showform: false }" class="space-y-2">
+    <x-ts-card header="Campos adicionais" class="space-y-2">
         @forelse ($fields as $field)
-            <div class="flex justify-between items-center bg-gray-100 p-1.5 rounded flex-wrap" x-data="{ show_options: false }">
+            <div class="flex justify-between items-center bg-gray-100 p-1.5 rounded flex-wrap" x-data="{ show_options: false }" wire:key="custom-field-{{ $field->id }}">
                 <div class="flex-1">
                     {{ $field->name }}<span class="text-gray-500 text-sm pl-2">({{ $field->type }})</span>
                 </div>
@@ -11,8 +11,8 @@
                     @if ($field->type == 'select')
                         <x-ts-button icon="equals" color="secondary" flat sm @click="show_options = !show_options" />
                     @endif
-                    <x-ts-button icon="pencil" flat sm wire:click="editCustomField({{ $field }})"
-                        @click="showform = true" />
+                    <x-ts-button icon="pencil" flat sm wire:click="editCustomField({{ $field->id }})"
+                        @click="$dispatch('show-custom-field-form')" />
                     <x-ts-button icon="trash" color="red" flat sm
                         wire:click="removeCustomField({{ $field->id }})" />
                 </div>
@@ -37,9 +37,9 @@
             <div class="text-center text-gray-500">Nenhum campo adicional cadastrado</div>
         @endforelse
         <x-slot:footer>
-            <div x-data="{ showform: false }" class="w-full">
+            <div x-data="{ showform: false }" x-on:show-custom-field-form.window="showform = true" class="w-full">
                 <div x-show="!showform" x-collapse>
-                    <x-ts-button text="Adicionar" outline icon="plus" @click="showform = true" block sm />
+                    <x-ts-button text="Adicionar" outline icon="plus" wire:click="resetCustomFieldForm" @click="showform = true" block sm />
                 </div>
                 <div class="grid sm:grid-cols-2 gap-2" x-show="showform" x-collapse>
                     <div>
@@ -49,7 +49,7 @@
                         select="label:label|value:value" />
                     <div class="col-span-2">
                         <x-ts-button text="Salvar" wire:click="submit" />
-                        <x-ts-button text="Cancelar" flat @click="showform = false" />
+                        <x-ts-button text="Cancelar" flat wire:click="resetCustomFieldForm" @click="showform = false" />
                     </div>
                 </div>
             </div>

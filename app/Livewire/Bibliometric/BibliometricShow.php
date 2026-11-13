@@ -38,7 +38,7 @@ class BibliometricShow extends Component
     {
         $headers = [
             ['index' => 'type', 'label' => 'Tipo de produção', 'sortable' => false],
-            ['index' => 'count', 'label' => 'Quantidade', 'sortable' => false],
+            ['index' => 'count', 'label' => 'Quantidade', 'align' => 'center', 'sortable' => false],
         ];
 
         return view('livewire.bibliometric.bibliometric-show', compact('headers'))
