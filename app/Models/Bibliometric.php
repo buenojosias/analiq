@@ -18,7 +18,6 @@ class Bibliometric extends Model
         'repositories',
         'types',
         'terms',
-        'combinations',
         'start_year',
         'end_year',
         'languages',
@@ -30,7 +29,6 @@ class Bibliometric extends Model
             'repositories' => 'array',
             'types' => 'array',
             'terms' => 'array',
-            'combinations' => 'array',
             'languages' => 'array',
         ];
     }
@@ -44,7 +42,6 @@ class Bibliometric extends Model
     {
         return $this->hasOne(WordAnalysisConfig::class);
     }
-
 
     public function customFields(): HasMany
     {

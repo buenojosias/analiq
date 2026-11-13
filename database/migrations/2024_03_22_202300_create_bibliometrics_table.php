@@ -14,7 +14,6 @@ return new class extends Migration
             $table->json('repositories');
             $table->json('types');
             $table->json('terms');
-            $table->json('combinations')->nullable();
             $table->year('start_year');
             $table->year('end_year');
             $table->json('languages');

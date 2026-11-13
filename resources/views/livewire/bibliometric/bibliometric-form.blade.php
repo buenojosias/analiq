@@ -19,17 +19,14 @@
                             <x-ts-tag wire:model="terms" label="Descritores *" hint="Separe os itens com vírgula" />
                         </div>
                         <div class="col-span-3">
-                            <x-ts-tag wire:model="combinations" label="Combinações *" hint="Ex: A+B, A+C, B+C" />
-                        </div>
-                        <div class="col-span-3">
                             <x-ts-tag wire:model="languages" label="Idiomas *" hint="Separe os itens com vírgula" />
                         </div>
-                        <div class="col-span-2">
+                        <div class="col-span-3 grid sm:grid-cols-2 gap-4">
                             <x-ts-number wire:model.live.blur="start_year" label="Ano inicial *" min="1900" />
-                        </div>
-                        <div class="col-span-2">
                             <x-ts-number wire:model="end_year" label="Ano final *" />
                         </div>
+                        {{-- <div class="col-span-2">
+                        </div> --}}
                     </div>
                     <x-slot:footer>
                         @if ($bibliometric)

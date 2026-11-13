@@ -18,7 +18,7 @@ class BibliometricFactory extends Factory
                         'Scielo',
                         'Scopus',
                         'Capes',
-                        'Web of Science'
+                        'Web of Science',
                     ],
                     rand(1, 2)
                 ),
@@ -26,13 +26,11 @@ class BibliometricFactory extends Factory
                 ->randomElements(
                     ProductionTypeEnum::class,
                     rand(1, 2)
-                )
-            ,
+                ),
             'terms' => [
                 'a' => fake()->word(),
-                'b' => fake()->word()
+                'b' => fake()->word(),
             ],
-            'combinations' => ["A", "B", "A+B"],
             'start_year' => $start_year,
             'end_year' => rand($start_year + 1, 2024),
             'languages' => fake()
@@ -40,7 +38,7 @@ class BibliometricFactory extends Factory
                     [
                         'Português',
                         'Inglês',
-                        'Espanhol'
+                        'Espanhol',
                     ],
                     rand(1, 2)
                 ),

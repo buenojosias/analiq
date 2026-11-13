@@ -27,9 +27,6 @@ class BibliometricForm extends Component
     #[Validate('required:array')]
     public $terms = [];
 
-    #[Validate('required:array')]
-    public $combinations = [];
-
     #[Validate]
     public $start_year;
 
@@ -62,7 +59,6 @@ class BibliometricForm extends Component
             $this->repositories = $this->bibliometric->repositories;
             $this->types = $this->bibliometric->types;
             $this->terms = $this->bibliometric->terms;
-            $this->combinations = $this->bibliometric->combinations;
             $this->start_year = $this->bibliometric->start_year;
             $this->end_year = $this->bibliometric->end_year;
             $this->languages = $this->bibliometric->languages;

@@ -11,7 +11,6 @@
                     <x-detail label="Repositórios" :value="$bibliometric->repositories" />
                     <x-detail label="Tipos de publicação" :value="$bibliometric->types" />
                     <x-detail label="Palavras" :value="$bibliometric->terms" />
-                    <x-detail label="Combinações" :value="$bibliometric->combinations" />
                     <x-detail label="Intervalo de anos" :value="$bibliometric->period" />
                     <x-detail label="Idioma(s)" :value="$bibliometric->languages" />
                 </div>

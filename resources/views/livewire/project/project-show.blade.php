@@ -3,7 +3,7 @@
         <x-ts-button text="Editar" x-on:click="$wire.dispatch('open-form-modal')" />
     </x-page-header>
     @if (session('status'))
-        <x-ts-alert :text="session('status')" color="teal" close />
+        <x-ts-alert :text="session('status')" color="green" light close />
     @endif
     <div class="lg:grid grid-cols-3 gap-6">
         <div class="mb-6">
@@ -27,7 +27,6 @@
                         <x-detail label="Repositórios" :value="$project->bibliometric->repositories" />
                         <x-detail label="Tipos de publicação" :value="$project->bibliometric->types" />
                         <x-detail label="Palavras pesquisadas" :value="$project->bibliometric->terms" />
-                        <x-detail label="Combinações" :value="$project->bibliometric->combinations" />
                         <x-detail label="Intervalo de anos" :value="$project->bibliometric->period" />
                         <x-detail label="Idioma(s)" :value="$project->bibliometric->languages" />
                         <x-detail label="Resultados encontrados" :value="$project->productions_count" />
