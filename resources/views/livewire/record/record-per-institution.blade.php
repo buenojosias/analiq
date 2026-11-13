@@ -1,5 +1,6 @@
+<x-slot:title>Estatísticas por instituição</x-slot:title>
+
 <div>
-    <x-page-header title="Estatísticas por instituição" />
     <div class="sm:flex gap-x-6">
         @include('includes.records-nav')
         <div class="flex-auto grid grid-cols-5 gap-x-6">

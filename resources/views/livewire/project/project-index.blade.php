@@ -1,7 +1,9 @@
+<x-slot:title>Projetos</x-slot:title>
+<x-slot:actions>
+    <x-ts-button text="Novo projeto" x-on:click="Livewire.dispatch('open-form-modal')" />
+</x-slot:actions>
+
 <div>
-    <x-page-header title="Projetos">
-        <x-ts-button text="Novo projeto" x-on:click="$wire.dispatch('open-form-modal')" />
-    </x-page-header>
     <x-ts-table :$headers :rows="$projects">
         @interact('column_theme', $row)
             <a href="{{ route('project.show', $row) }}">{{ $row->theme }}</a>

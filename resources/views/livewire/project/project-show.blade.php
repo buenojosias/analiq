@@ -1,7 +1,9 @@
+<x-slot:title>Projeto</x-slot:title>
+<x-slot:actions>
+    <x-ts-button text="Editar" x-on:click="Livewire.dispatch('open-form-modal')" />
+</x-slot:actions>
+
 <section>
-    <x-page-header title="Projeto" :subtitle="$project->theme">
-        <x-ts-button text="Editar" x-on:click="$wire.dispatch('open-form-modal')" />
-    </x-page-header>
     @if (session('status'))
         <x-ts-alert :text="session('status')" color="green" light close />
     @endif

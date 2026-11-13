@@ -1,6 +1,7 @@
+<x-slot:title>Tags do projeto</x-slot:title>
+
 <div>
     <x-ts-toast />
-    <x-page-header title="Tags do projeto" />
     <div class="flex flex-col lg:flex-row gap-6">
         <div>
             <x-ts-table :headers="$tagHeaders" :rows="$tags">

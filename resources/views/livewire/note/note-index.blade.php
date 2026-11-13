@@ -1,9 +1,11 @@
+<x-slot:title>Anotações</x-slot:title>
+<x-slot:actions>
+    <x-ts-button text="Adicionar anotação" x-on:click="Livewire.dispatch('open-modal')" />
+</x-slot:actions>
+
 <div>
     <x-ts-toast />
     <x-ts-dialog />
-    <x-page-header title="Anotações" :subtitle="$project->theme">
-        <x-ts-button text="Adicionar anotação" wire:click="$dispatch('open-modal')" />
-    </x-page-header>
 
     <div class="space-y-3">
         @forelse($notes as $note)

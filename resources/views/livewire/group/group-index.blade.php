@@ -1,11 +1,13 @@
+<x-slot:title>Grupos de produções</x-slot:title>
+<x-slot:actions>
+    <div class="flex flex-col gap-4">
+        <x-ts-button text="Criar grupo" x-on:click="Livewire.dispatch('open-modal')" />
+    </div>
+</x-slot:actions>
+
 <div>
     <x-ts-toast />
     <x-ts-dialog />
-    <x-page-header title="Grupos de produções" :subtitle="$project->theme">
-        <div class="flex flex-col gap-4">
-            <x-ts-button text="Criar grupo" wire:click="$dispatch('open-modal')" />
-        </div>
-    </x-page-header>
 
     <x-ts-table :$headers :rows="$this->groups">
         @interact('column_name', $row)

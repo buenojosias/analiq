@@ -1,5 +1,6 @@
+<x-slot:title>Ranking de palavras</x-slot:title>
+
 <section>
-    <x-page-header title="Ranking de palavras" />
     <div class="lg:grid grid-cols-5 gap-6">
         <div class="mb-6 col-span-2">
             <x-ts-card>

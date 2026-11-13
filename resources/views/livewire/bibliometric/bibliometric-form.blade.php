@@ -1,6 +1,7 @@
+<x-slot:title>{{ $bibliometric ? 'Editar bibliometria' : 'Adicionar bibliometria' }}</x-slot:title>
+
 <section>
     <x-ts-toast />
-    <x-page-header :title="$bibliometric ? 'Editar bibliometria' : 'Adicionar bibliometria'" />
     <x-ts-errors />
     <div class="sm:grid grid-cols-3 gap-6">
         <div class="col-span-2">

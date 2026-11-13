@@ -1,5 +1,6 @@
+<x-slot:title>Bibliometria</x-slot:title>
+
 <section>
-    <x-page-header title="Bibliometria" :subtitle="$project->theme" />
     @if (session('status'))
         <x-ts-alert :text="session('status')" color="teal" close />
     @endif

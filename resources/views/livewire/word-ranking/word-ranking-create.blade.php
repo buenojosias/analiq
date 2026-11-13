@@ -1,3 +1,5 @@
+<x-slot:title>Gerar ranking de palavras</x-slot:title>
+
 <section>
     <x-ts-loading>
         <div class="flex items-center text-primary-500 dark:text-white">
@@ -5,7 +7,6 @@
             Processando...
         </div>
     </x-ts-loading>
-    <x-page-header title="Gerar ranking de palavras" />
     <div class="">
         <div class="">
             <x-ts-errors />

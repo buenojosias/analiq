@@ -1,6 +1,7 @@
+<x-slot:title>Adicionar produção</x-slot:title>
+
 <section>
     <x-ts-toast />
-    <x-page-header title="Adicionar produção" :subtitle="$project->theme" />
     <form wire:submit="save" autocomplete="off">
         <x-ts-card>
             <div class="lg:grid grid-cols-6 gap-4 space-y-4 lg:space-y-0">

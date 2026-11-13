@@ -1,5 +1,6 @@
+<x-slot:title>Arquivos da bibliometria</x-slot:title>
+
 <section>
-    <x-page-header title="Arquivos da bibliometria" :subtitle="$project->theme" />
         <div class="lg:grid grid-cols-4 gap-6">
         <div class="col-span-3 flex flex-wrap -mx-4">
             @forelse ($productions as $production)

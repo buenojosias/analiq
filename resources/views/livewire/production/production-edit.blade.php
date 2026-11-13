@@ -1,6 +1,7 @@
+<x-slot:title>Editar produção</x-slot:title>
+
 <section>
     <x-ts-toast />
-    <x-page-header title="Editar produção" :subtitle="$production->title" />
     <form wire:submit="save">
         <x-ts-card>
             <div class="lg:grid grid-cols-6 gap-4 space-y-4 lg:space-y-0">

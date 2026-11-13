@@ -1,6 +1,7 @@
+<x-slot:title>Estatísticas por descritores</x-slot:title>
+
 <div>
     <x-ts-toast />
-    <x-page-header title="Estatísticas por descritores" />
     <div class="sm:flex gap-x-6">
         @include('includes.records-nav')
         <div class="flex-auto grid grid-cols-5 gap-x-6">

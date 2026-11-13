@@ -1,12 +1,14 @@
+<x-slot:title>Grupo de produções</x-slot:title>
+<x-slot:actions>
+    <div class="flex flex-col gap-1">
+        <x-ts-button text="Adicionar produção" x-on:click="Livewire.dispatch('open-slide')" />
+        <x-ts-button text="Carregar resumos" x-on:click="Livewire.find('{{ $this->getId() }}').loadAbstract()" />
+    </div>
+</x-slot:actions>
+
 <div>
     <x-ts-toast />
     <x-ts-dialog />
-    <x-page-header title="Grupo de produções" :subtitle="$group->name">
-        <div class="flex flex-col gap-1">
-            <x-ts-button text="Adicionar produção" wire:click="$dispatch('open-slide')" />
-            <x-ts-button text="Carregar resumos" wire:click="loadAbstract" />
-        </div>
-    </x-page-header>
 
     <x-ts-table :$headers :rows="$this->groupProductions">
         @if ($group->description)

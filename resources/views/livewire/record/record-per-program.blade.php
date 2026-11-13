@@ -1,5 +1,6 @@
+<x-slot:title>Estatísticas por programa</x-slot:title>
+
 <div>
-    <x-page-header title="Estatísticas por programa" />
     <div class="sm:flex gap-x-6">
         @include('includes.records-nav')
         <div class="flex-auto grid grid-cols-5 gap-x-6">

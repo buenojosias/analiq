@@ -128,7 +128,7 @@ main .header {
 }
 
 h1 {
-    @apply text-xl font-bold;
+    @apply text-lg font-bold text-gray-800;
 }
 
 .card-header {

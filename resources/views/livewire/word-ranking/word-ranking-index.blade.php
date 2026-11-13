@@ -1,7 +1,9 @@
+<x-slot:title>Ranking de palavras</x-slot:title>
+<x-slot:actions>
+    <x-ts-button :href="route('project.bibliometrics.wordrankings.create', $project)" wire:navigate text="Nova análise" />
+</x-slot:actions>
+
 <section>
-    <x-page-header title="Ranking de palavras">
-        <x-ts-button :href="route('project.bibliometrics.wordrankings.create', $project)" wire:navigate text="Nova análise" />
-    </x-page-header>
     <x-ts-table :$headers :rows="$wordrankings">
         @interact('column_title', $row)
             <a href="{{ route('project.bibliometrics.wordrankings.show', [$project, $row]) }}" wire:navigate>

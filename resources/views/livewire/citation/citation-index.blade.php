@@ -1,5 +1,6 @@
+<x-slot:title>Citações</x-slot:title>
+
 <div>
-    <x-page-header title="Citações" />
     <div class="flex gap-6">
         <div class="w-[320px] space-y-4">
             <x-ts-card header="Buscar expressão">

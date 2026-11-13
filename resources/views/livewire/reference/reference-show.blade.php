@@ -1,5 +1,6 @@
+<x-slot:title>Detalhes da referência</x-slot:title>
+
 <div>
-    <x-page-header title="Detalhes da referência" :subtitle="$reference->title" />
     <div class="sm:grid grid-cols-5 gap-4">
         <div class="col-span-2">
             <x-ts-card header="Detalhes">

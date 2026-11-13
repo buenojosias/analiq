@@ -1,5 +1,6 @@
+<x-slot:title>Dashboard</x-slot:title>
+
 <div>
-    <x-page-header title="Dashboard" subtitle="Research" />
 
     <div class="sm:grid grid-cols-3 gap-4 space-y-2 sm:space-y-0 mb-6">
         <x-ts-stats title="Projetos" :number="$projects->count()" />

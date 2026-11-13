@@ -1,11 +1,13 @@
+<x-slot:title>Produções encontradas</x-slot:title>
+<x-slot:actions>
+    <div class="flex flex-col gap-1">
+        <x-ts-button text="Adicionar produção" :href="route('project.bibliometrics.productions.create', $project)" wire:navigate />
+        <x-ts-button text="Grupos" icon="rectangle-group" :href="route('project.bibliometrics.productions.groups.index', $project)" flat />
+    </div>
+</x-slot:actions>
+
 <section>
     <x-ts-toast />
-    <x-page-header title="Produções encontradas" :subtitle="$project->theme">
-        <div class="flex flex-col gap-1">
-            <x-ts-button text="Adicionar produção" :href="route('project.bibliometrics.productions.create', $project)" wire:navigate />
-            <x-ts-button text="Grupos" icon="rectangle-group" :href="route('project.bibliometrics.productions.groups.index', $project)" flat />
-        </div>
-    </x-page-header>
     <div class="screen">
         <x-ts-table :$headers :rows="$productions">
             <x-slot:header>

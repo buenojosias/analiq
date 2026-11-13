@@ -1,9 +1,11 @@
+<x-slot:title>Resultado preliminar</x-slot:title>
+<x-slot:actions>
+    <x-ts-button text="Adicionar resultado" x-on:click="Livewire.find('{{ $this->getId() }}').$set('modal', true)" />
+</x-slot:actions>
+
 <div>
     <x-ts-toast />
     <x-ts-dialog />
-    <x-page-header title="Resultado preliminar">
-        <x-ts-button text="Adicionar resultado" wire:click="$toggle('modal')" />
-    </x-page-header>
 
     <div x-data="{ expanded: false }">
         <x-ts-button x-on:click="expanded = !expanded" text="Tabela detalhada" icon="chevron-down" flat />

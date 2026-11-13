@@ -70,11 +70,15 @@
                 <x-nav-link label="Projetos" href="{{ route('projects.index') }}" />
             @endif
         </nav>
-        <div class="border-t stack flex justify-between">
-            <h1 class="text-lg text-gray-800 font-bold">PageTitle</h1>
-            <div>
-                <x-ts-button text="Exportar" />
-            </div>
+        <div class="border-t stack flex justify-between items-center">
+            <h1>{{ $title ?? '' }}</h1>
+            @isset($actions)
+                @if ($actions->hasActualContent())
+                    <div id="actions">
+                        {{ $actions }}
+                    </div>
+                @endif
+            @endisset
         </div>
     </header>
 

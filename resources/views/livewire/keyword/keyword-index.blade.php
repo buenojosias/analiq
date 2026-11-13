@@ -1,6 +1,7 @@
+<x-slot:title>Palavras-chave</x-slot:title>
+
 <section>
     <x-ts-toast />
-    <x-page-header title="Palavras-chave" :subtitle="$project->theme" />
     <div class="flex flex-col lg:flex-row-reverse gap-6">
         <div class="lg:w-2/3">
             @if ($selectedKeyword && $keywordProductions)

@@ -1,7 +1,6 @@
+<x-slot:title>Referências do projeto</x-slot:title>
+
 <div>
-    <x-page-header title="Referências do projeto"
-        subtitle="Estas referências são geradas automaticamente com base nas produções registradas no projeto.
-        Estão prontas para serem adicionadas à sua monografia" />
 
     @foreach ($references as $reference)
         <p class="mb-4">

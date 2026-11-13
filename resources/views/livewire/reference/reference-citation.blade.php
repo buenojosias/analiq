@@ -1,11 +1,6 @@
+<x-slot:title>Citações da referência</x-slot:title>
+
 <div>
-    <x-page-header title="Citações da referência" :subtitle="
-        $reference->title .
-        ' ('.
-        $reference->short_author.', '.
-        $reference->year .
-        ')'
-    " />
 
     {{-- @foreach ($citations as $title => $cits)
         <p class="text-lg font-semibold">{{ $title }}</p>

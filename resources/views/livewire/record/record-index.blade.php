@@ -1,5 +1,6 @@
+<x-slot:title>Estatísticas</x-slot:title>
+
 <div>
-    <x-page-header title="Estatísticas" />
     <div class="sm:flex gap-x-6">
         @include('includes.records-nav')
         <div class="flex-auto">

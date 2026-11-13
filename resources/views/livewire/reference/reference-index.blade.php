@@ -1,9 +1,11 @@
+<x-slot:title>Referências</x-slot:title>
+<x-slot:actions>
+    <div class="flex flex-col gap-1">
+        <x-ts-button text="Referências do projeto" :href="route('project.bibliometrics.references.project', $project)" flat />
+    </div>
+</x-slot:actions>
+
 <div>
-    <x-page-header title="Referências">
-        <div class="flex flex-col gap-1">
-            <x-ts-button text="Referências do projeto" :href="route('project.bibliometrics.references.project', $project)" flat />
-        </div>
-    </x-page-header>
     <x-ts-table :$headers :rows="$references" paginate>
         <x-slot:header>
             <div class="table-header flex justify-between items-center">
