@@ -1,3 +1,4 @@
+<x-slot:title>Objetivos</x-slot:title>
 <div class="flex gap-6" x-data="{ showWithoutGoal: false }">
     <div class="w-60">
         <x-ts-card header="Opções" class="space-y-2">
@@ -6,7 +7,6 @@
     </div>
 
     <div class="flex-1 space-y-4 mb-6">
-        <h1 class="mb-4">Objetivos</h1>
         <x-ts-card class="space-y-2">
             @foreach ($productionsWithGoal as $production)
                 <div class="p-2 border rounded shadow-sm" x-data="{ showSpecifics: false }">

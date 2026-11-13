@@ -1,8 +1,8 @@
 <x-slot:title>Produções encontradas</x-slot:title>
 <x-slot:actions>
-    <div class="flex flex-col gap-1">
-        <x-ts-button text="Adicionar produção" :href="route('project.bibliometrics.productions.create', $project)" wire:navigate />
+    <div class="flex gap-1">
         <x-ts-button text="Grupos" icon="rectangle-group" :href="route('project.bibliometrics.productions.groups.index', $project)" flat />
+        <x-ts-button text="Adicionar produção" :href="route('project.bibliometrics.productions.create', $project)" wire:navigate />
     </div>
 </x-slot:actions>
 
