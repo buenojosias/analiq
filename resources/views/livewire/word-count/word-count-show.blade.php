@@ -15,15 +15,13 @@
                     <x-detail label="Produções encontrados" :value="count($wordcount->records)" />
                     <x-detail label="Data do relatório" :value="$wordcount->created_at->format('d/m/Y')" />
                 </div>
-                <div class="card-footer">
-                    <div class="space-x-4 flex-1 flex">
+                <x-slot:footer between>
+                    <div class="flex gap-4">
                         <x-ts-toggle x-model="showtable" label="Mostrar tabela" />
                         <x-ts-toggle x-model="showdetails" label="Mostrar detalhes" />
                     </div>
-                    <div>
-                        <x-ts-button text="Excluir relatório" color="red" />
-                    </div>
-                </div>
+                    <x-ts-button text="Excluir relatório" color="red" />
+                </x-slot:footer>
             </x-ts-card>
         </div>
 
@@ -70,21 +68,19 @@
                             number_format($record['percentage'], 2, ',', '.') .
                             '%)'" />
                     </div>
-                    <div class="card-footer" x-show="details" x-transition>
-                        <div>
-                            <x-ts-button
-                                wire:click="loadContext({{ $record['internal_id'] }}, '{{ $record['section'] }}')"
-                                text="Ver contexto" outline />
-                            {{-- <x-ts-button :href="route('researches.productions.content', [
-                                $research,
-                                $record['production']['id'],
-                            ])" wire:navigate text="Ler conteúdo" outline /> --}}
-                            <x-ts-button :href="route('project.bibliometrics.productions.show', [
-                                $project,
-                                $record['production']['id'],
-                            ])" wire:navigate text="Abrir produção" outline />
-                        </div>
-                    </div>
+                    <x-slot:footer x-bind:class="details ? '' : 'hidden'">
+                        <x-ts-button
+                            wire:click="loadContext({{ $record['internal_id'] }}, '{{ $record['section'] }}')"
+                            text="Ver contexto" outline />
+                        {{-- <x-ts-button :href="route('researches.productions.content', [
+                            $research,
+                            $record['production']['id'],
+                        ])" wire:navigate text="Ler conteúdo" outline /> --}}
+                        <x-ts-button :href="route('project.bibliometrics.productions.show', [
+                            $project,
+                            $record['production']['id'],
+                        ])" wire:navigate text="Abrir produção" outline />
+                    </x-slot:footer>
                 </x-ts-card>
             @endforeach
         </div>

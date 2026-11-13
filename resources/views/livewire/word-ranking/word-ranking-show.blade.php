@@ -14,15 +14,6 @@
                     <x-detail label="Contagem total" :value="$totalCount" />
                     <x-detail label="Data do relatório" :value="$wordranking->created_at->format('d/m/Y')" />
                 </div>
-                {{-- <div class="card-footer">
-                    <div class="space-x-4 flex-1 flex">
-                        <x-ts-toggle x-model="showtable" label="Mostrar tabela" />
-                        <x-ts-toggle x-model="showdetails" label="Mostrar detalhes" />
-                    </div>
-                    <div>
-                        <x-ts-button text="Excluir relatório" color="red" />
-                    </div>
-                </div> --}}
             </x-ts-card>
         </div>
 

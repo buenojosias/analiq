@@ -91,7 +91,7 @@
                         <x-detail label="{{ $field->name }}" :value="$field->pivot->value" />
                     @endforeach
                 </div>
-                <div class="card-footer">
+                <x-slot:footer between>
                     <x-ts-link :href="route('project.bibliometrics.productions.edit', [$project, $production])" wire:navigate text="Editar" />
                     <x-ts-link :href="route('project.bibliometrics.productions.index', $project)" wire:navigate text="Voltar para resultados" />
                     @if (!$production->highlighted)
@@ -99,7 +99,7 @@
                     @else
                         <x-ts-button text="Remover destaque" wire:click="unhighlight" outline />
                     @endif
-                </div>
+                </x-slot:footer>
             </x-ts-card>
         </div>
         <div class="mb-6 space-y-6">
@@ -115,10 +115,10 @@
                 @empty
                     <p>Nenhuma anotação adicionada</p>
                 @endforelse
-                <div class="card-footer">
+                <x-slot:footer>
                     <x-ts-button text="Adicionar anotação"
                         wire:click="$dispatch('open-modal', { production: {{ $production }} })" />
-                </div>
+                </x-slot:footer>
             </x-ts-card>
 
             <x-ts-card header="Palavras-chave">
@@ -129,11 +129,6 @@
                         <p>Nenhuma palavra-chave adicionada</p>
                     @endforelse
                 </ul>
-                <div class="card-footer">
-                    {{-- <x-ts-link text="Ver mais" :href="route('projects.productions.content', [$project, $production])" wire:navigate /> --}}
-                    {{-- <x-ts-link text="Editar resumo" :href="route('projects.productions.abstract', [$project, $production])" wire:navigate /> --}}
-                    {{-- <x-ts-link text="Editar conteúdo" :href="route('projects.productions.body', [$project, $production])" wire:navigate /> --}}
-                </div>
             </x-ts-card>
 
             <x-ts-card header="Tags">
@@ -146,9 +141,9 @@
                         @endforelse
                     </ul>
                 </div>
-                <div class="card-footer">
+                <x-slot:footer>
                     <x-ts-link text="Gerenciar" :href="route('project.bibliometrics.productions.tags', [$project, $production])" wire:navigate />
-                </div>
+                </x-slot:footer>
             </x-ts-card>
 
             <x-ts-card header="Arquivo PDF">

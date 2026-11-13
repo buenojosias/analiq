@@ -15,9 +15,6 @@
                         <x-detail label="Usuário" :value="$project->user->name" />
                     @endif
                 </div>
-                <div class="card-footer">
-                    {{-- <x-ts-link :href="route('researches.edit', $research)" wire:navigate>Editar</x-ts-link> --}}
-                </div>
             </x-ts-card>
         </div>
         <div class="mb-6">
@@ -31,16 +28,16 @@
                         <x-detail label="Idioma(s)" :value="$project->bibliometric->languages" />
                         <x-detail label="Resultados encontrados" :value="$project->productions_count" />
                     </div>
-                    <div class="card-footer">
+                    <x-slot:footer between>
                         <x-ts-link :href="route('project.bibliometrics.show', $project)" wire:navigate>Acessar</x-ts-link>
                         <x-ts-link :href="route('project.bibliometrics.productions.index', $project)" wire:navigate>Produções</x-ts-link>
                         <x-ts-link :href="route('project.bibliometrics.edit', $project)" wire:navigate>Editar</x-ts-link>
-                    </div>
+                    </x-slot:footer>
                 @else
                     Bibliometria não encontrada
-                    <div class="card-footer">
+                    <x-slot:footer>
                         <x-ts-link :href="route('project.bibliometrics.create', $project)" wire:navigate>Adicionar bibliometria</x-ts-link>
-                    </div>
+                    </x-slot:footer>
                 @endif
             </x-ts-card>
         </div>

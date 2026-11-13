@@ -14,9 +14,9 @@
                     <x-detail label="Intervalo de anos" :value="$bibliometric->period" />
                     <x-detail label="Idioma(s)" :value="$bibliometric->languages" />
                 </div>
-                <div class="card-footer">
+                <x-slot:footer>
                     <x-ts-link :href="route('project.bibliometrics.edit', $project)" wire:navigate>Editar</x-ts-link>
-                </div>
+                </x-slot:footer>
             </x-ts-card>
         </div>
 
@@ -34,11 +34,11 @@
                 @livewire('bibliometric.custom-fields', ['bibliometric' => $bibliometric])
                 <div>
                     <x-ts-card>
-                        <div class="pb-3 border-b">
-                            <x-ts-link href="#" wire:navigate text="Ranking de palavras" />
+                        <div class="pb-3 border-b border-gray-300">
+                            <x-ts-link :href="route('project.bibliometrics.wordrankings.index', $project)" wire:navigate text="Ranking de palavras" />
                         </div>
                         <div class="pt-3">
-                            <x-ts-link href="#" wire:navigate text="Frequência de palavras" />
+                            <x-ts-link :href="route('project.bibliometrics.wordcounts.index', $project)" wire:navigate text="Frequência de palavras" />
                         </div>
                     </x-ts-card>
                 </div>
